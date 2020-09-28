@@ -1,3 +1,5 @@
+//Zadatak je generirati niz nasumicnih brojeva bez ponavljanja u intervalu od <20,50>
+
 #include<stdio.h>
 #include<stdlib.h>
 #include<time.h>

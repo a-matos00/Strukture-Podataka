@@ -1,4 +1,4 @@
-//Iscitaj imena i prezimena studenata i postotak rijesenosti ispita iz datoteke lista.txt i spremi ih u strukturu
+//Iscitaj imena i prezimena studenata iz datoteke lista.txt i spremi ih u strukturu
 
 #include<stdio.h>
 #include<string.h>
@@ -24,7 +24,7 @@ int main()
     if( fp == NULL ) 
         puts("Greška pri otvaranju datoteke!");
 
-    while( !feof(fp)){  //dok se ne dode od kraja datoteke
+    while( !feof(fp)){  //dok se ne dode od kraja datoteke moze i "feof(fp) == 0"
         for( i = 0; i < N; i++)    
             fscanf(fp, "%s %s %d", studenti[i].ime, studenti[i].prezime, &studenti[i].postotak);
     }

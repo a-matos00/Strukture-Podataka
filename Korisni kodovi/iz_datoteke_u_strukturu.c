@@ -1,4 +1,4 @@
-//Iscitaj imena i prezimena studenata iz datoteke lista.txt i spremi ih u strukturu
+//Iscitaj imena i prezimena studenata i postotak rijesenosti ispita iz datoteke lista.txt i spremi ih u strukturu
 
 #include<stdio.h>
 #include<string.h>

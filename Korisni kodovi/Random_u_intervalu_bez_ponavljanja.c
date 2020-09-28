@@ -38,14 +38,16 @@ int nasumicni(int niz[N], int n){
 
     int x;  // "x" generirani nasumicni broj koji vracamo
     int i = 0;
-    int check = 0;    // pomocna varijabla za provjeru ponavljanja
+    int check = 0;    // pomocna varijabla za provjeru ponavljanja ("0" ako se ne ponvalja, "1" ako se ponavlja)
     x = rand() % ( 50 - 20 + 1) + 20;   // "(b - a + 1) + a" za interval od <20,50>
 
     for( i = 0; i < n; i++)
-        if( x == niz[i])    //ako generirani broj odgovara vec postojecem broju u nizu
+        if( x == niz[i]){    //ako generirani broj odgovara vec postojecem broju u nizu
             check++;
+            break;
+        }
     
-    if( check > 0 ) //ako generirani broj vec postoji, generiramo novi broj rekurzuvnim pozivom funkcije
+    if( check == 1 ) //ako generirani broj vec postoji, generiramo novi broj rekurzuvnim pozivom funkcije
         return nasumicni(niz, n);
     else
         return x;

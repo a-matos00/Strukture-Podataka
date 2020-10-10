@@ -19,7 +19,7 @@ int main()
         if (trazeni == niz[sredina]) {  //ako se trazeni broj nalazi tocno na sredini intervala koji gledamo
             broj = trazeni;   
             printf("trazeni broj je %d na [%d]", niz[sredina], sredina);
-            return 0;   //pronaöli smo broj te izlazimo iz programa
+            return 0;   //prona≈°li smo broj te izlazimo iz programa
         }
 
         else if (trazeni < niz[sredina])

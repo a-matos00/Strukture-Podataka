@@ -2,6 +2,7 @@
 #include<stdlib.h>
 
 #define ERROR_1 (-1)	//ako datoteka nije otvorena
+#define max_bod (float)150	//najveci moguci broj bodova
 
 typedef struct student {	//definirana je nova vrsta podatka "_student"
 	char ime[30];
@@ -10,7 +11,6 @@ typedef struct student {	//definirana je nova vrsta podatka "_student"
 	float rel_bodovi;
 }_student;
 
-float max_bodovi(_student*, int);	//funkcija trazi i vraca najveci broj bodova
 int brojac_studenata(FILE*);	//funkcija vraca broj studenata
 
 int main()
@@ -20,7 +20,6 @@ int main()
 	int n = 0;	//broj studenata
 	int i = 0, j = 0;
 	float temp = 0;
-	float max_bod = 0;	//maksimalni postignuti broj bodova od svih studenata
 
 	fp = fopen("studenti.txt", "r");	//otvaramo datoteku
 
@@ -30,7 +29,7 @@ int main()
 	}
 
 	n = brojac_studenata(fp);	//funkcija vraca broj studenata
-	
+
 	//printf("Broj studenata je %d\n",n); //provjera brojaca studenata
 
 	rewind(fp);	//pokazivac se vraca na pocetak datoteke
@@ -44,8 +43,6 @@ int main()
 		i++;
 	}
 
-	max_bod = max_bodovi(studenti, n);	//pozivamo funkciju koja vraca najveci broj bodova
-
 	for (i = 0; i < n; i++) {
 		studenti[i].rel_bodovi = (studenti[i].bodovi / max_bod) * 100;
 	}
@@ -55,19 +52,6 @@ int main()
 	}
 
 	fclose(fp);	//zatvaramo datoteku
-}
-
-float max_bodovi(_student* p, int n)
-{
-	float max_bod = p[0].bodovi;
-	int i = 0;
-
-	for (i = 0; i < n - 1; i++)
-		if (p[i].bodovi > p[i + 1].bodovi) {
-			max_bod = p[i].bodovi;
-		}
-
-	return max_bod;
 }
 
 //sljedeca petlja broji retke jer je datoteka formatirana na nacin 1 redak = 1 student

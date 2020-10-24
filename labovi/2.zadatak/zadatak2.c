@@ -1,7 +1,7 @@
 // strcmp(char[],char[]) --> funkcija usporeduje svaki znak u stringovima te vraca "0" ako su identicni
 //ako nisu vratit ce vrijednost koja nije nula
 
-//linux
+//master
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>

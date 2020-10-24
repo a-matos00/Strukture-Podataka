@@ -14,11 +14,11 @@ typedef struct osoba {
     element next; 
 }_osoba;
 
-void ispis(element); //funkcija ispisuje elemente
-void unosPocetak(element); //funkcija dodaje novi element na pocetak liste
-void unosKraj(element);    //funkcija unosi novi element na kraj liste
-void traziPrezime(element);    //funkcija trazi element u listi po prezimenu
-void traziUkloni(element); //funkcija trazi element po prezimenu te ga uklanja iz liste
+int ispis(element); //funkcija ispisuje elemente
+int unosPocetak(element); //funkcija dodaje novi element na pocetak liste
+int unosKraj(element);    //funkcija unosi novi element na kraj liste
+int traziPrezime(element);    //funkcija trazi element u listi po prezimenu
+int traziUkloni(element); //funkcija trazi element po prezimenu te ga uklanja iz liste
 
 int main()
 {
@@ -35,9 +35,14 @@ int main()
     return 0;
 }
 
-void unosPocetak(element p) //u funkciju smo poslali adresu HEAD elementa
+int unosPocetak(element p) //u funkciju smo poslali adresu HEAD elementa
 {
     element q = (element)malloc(sizeof(_osoba)); //stvaramo novu strukturu
+
+    if( q == NULL){
+        puts("GREŠKA! Memorija nije alocirana");
+        return -1;
+    }
 
     puts("Unesi ime:"); //unos podataka
     scanf("%s", q->ime);
@@ -48,11 +53,18 @@ void unosPocetak(element p) //u funkciju smo poslali adresu HEAD elementa
 
     q->next = p->next;  //dodani element sada pokazuje na ono na sto je prije pokazivao HEAD element
     p->next = q;  //HEAD element sada pokazuje na dodani element
+
+    return 0;
 }
 
-void unosKraj(element p)    //argument je adresa HEAD elementa
+int unosKraj(element p)    //argument je adresa HEAD elementa
 {
     element q = (element)malloc(sizeof(_osoba)); //stvaramo novu strukturu
+
+     if( q == NULL){
+        puts("GREŠKA! Memorija nije alocirana");
+        return -1;
+    }
 
     puts("Unesi ime:"); //unos podataka
     scanf("%s", q->ime);
@@ -66,9 +78,11 @@ void unosKraj(element p)    //argument je adresa HEAD elementa
     }
         p->next = q;  //bivsi zadnji element sada pokazuje na novi element
         q->next = NULL;     //novi element mora pokazivati na nista jer je zadnji u listi
+
+    return 0;
 }
 
-void ispis(element p)   //argument je adresa prvog stvarnog clan liste
+int ispis(element p)   //argument je adresa prvog stvarnog clan liste
 {
     puts("Ispis popisa ljudi:\n");
 
@@ -77,9 +91,11 @@ void ispis(element p)   //argument je adresa prvog stvarnog clan liste
         printf("%s\t%s\t%d\n", p->ime, p->prezime, p->godina); //ispis podataka trenutnog elementa liste
         p = p->next;    //prebacujemo se na sljedeci element u listi
     }
+
+    return 0;
 }
 
-void traziPrezime(element p) //argument je adresa prvog stvarnog clan liste
+int traziPrezime(element p) //argument je adresa prvog stvarnog clan liste
 {
     char prezime[20];   //u ovu varijablu upisujemo prezime koje trazimo
 
@@ -96,12 +112,19 @@ void traziPrezime(element p) //argument je adresa prvog stvarnog clan liste
 
     else if (strcmp(prezime, p->prezime) != 0)  //ako trazeni clan nije pronaden
         puts("Trazeno prezime ne postoji u listi"); //prigodna poruka
+
+    return 0;
 }
 
-void traziUkloni(element p) //argument je adresa HEAD elementa
+int traziUkloni(element p) //argument je adresa HEAD elementa
 {
     char prezime[20];
     element temp = (element)malloc(sizeof(_osoba));    //stvaramo privremenu varijablu koja sluzi za oznacavanje elementa koji prethodi trazenom clanu
+
+     if( temp == NULL){
+        puts("GREŠKA! Memorija nije alocirana");
+        return -1;
+    }
 
     puts("Upisi prezime osobe koju zelis ukloniti:");
     scanf("%s", prezime);
@@ -118,4 +141,6 @@ void traziUkloni(element p) //argument je adresa HEAD elementa
 
     else if (strcmp(prezime, p->prezime) != 0)
         puts("Trazeno prezime ne postoji u listi");
+
+    return 0;
 }

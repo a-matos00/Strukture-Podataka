@@ -11,7 +11,7 @@ typedef struct osoba {
     char ime[20];
     char prezime[20];
     int godina;
-    p_osoba next; 
+    p_osoba next;
 }_osoba;
 
 int ispis(p_osoba); //funkcija ispisuje clanove liste
@@ -26,12 +26,10 @@ int main()
     head.next = NULL; //postavljamo da prvi clan pokazuje na nista jer je trenutno jedini clan u listi
 
     unosKraj(&head);
-    unosKraj(&head);
-    traziPrezime(head.next);
     ispis(head.next);
     traziUkloni(&head);
     ispis(head.next);
-   
+
     return 0;
 }
 
@@ -39,7 +37,7 @@ int unosPocetak(p_osoba p) //u funkciju smo poslali adresu HEAD clana
 {
     p_osoba q = (p_osoba)malloc(sizeof(_osoba)); //stvaramo novu strukturu
 
-    if( q == NULL){
+    if (q == NULL) {
         puts("GREŠKA! Memorija nije alocirana");
         return -1;
     }
@@ -61,7 +59,7 @@ int unosKraj(p_osoba p)    //argument je adresa HEAD clana
 {
     p_osoba q = (p_osoba)malloc(sizeof(_osoba)); //stvaramo novu strukturu
 
-     if( q == NULL){
+    if (q == NULL) {
         puts("GREŠKA! Memorija nije alocirana");
         return -1;
     }
@@ -76,8 +74,8 @@ int unosKraj(p_osoba p)    //argument je adresa HEAD clana
     while (p->next != NULL) {   //dok ne dodemo do zadnjeg clana u listi
         p = p->next;    //prebacujemo se na sljedeci clan
     }
-        p->next = q;  //bivsi zadnji clan sada pokazuje na novi clan
-        q->next = NULL;     //novi clan mora pokazivati na nista jer je zadnji u listi
+    p->next = q;  //bivsi zadnji clan sada pokazuje na novi clan
+    q->next = NULL;     //novi clan mora pokazivati na nista jer je zadnji u listi
 
     return 0;
 }
@@ -99,7 +97,7 @@ int traziPrezime(p_osoba p) //argument je adresa prvog stvarnog clan liste
 {
     char prezime[20];   //u ovu varijablu upisujemo prezime koje trazimo
 
-    puts("Upisi prezime koje trazite:");   
+    puts("Upisi prezime koje trazite:");
     scanf("%s", prezime);   //unosimo trazeno prezime
 
     while (p->next != NULL && strcmp(prezime, p->prezime) != 0) //petlja se vrti dok ne dodemo do zadnjeg clana i dok vrijednost varijable prezime ne odgovara trazenom prezimenu(vidi vrh za objasnjenje strcmp();
@@ -121,7 +119,7 @@ int traziUkloni(p_osoba p) //argument je adresa HEAD clana
     char prezime[20];
     p_osoba temp = (p_osoba)malloc(sizeof(_osoba));    //stvaramo privremenu varijablu koja sluzi za oznacavanje clana koji prethodi trazenom clanu
 
-     if( temp == NULL){
+    if (temp == NULL) {
         puts("GREŠKA! Memorija nije alocirana");
         return -1;
     }
@@ -137,6 +135,7 @@ int traziUkloni(p_osoba p) //argument je adresa HEAD clana
 
     if (strcmp(prezime, p->prezime) == 0) { //ako smo pronasli trazeni clan
         temp->next = p->next;   //clan koji prethodi uklonjenom clanu ce sada pokazivati na clan liste koji slijedi nakon uklonjenog
+        free(p);    //oslobadamo memoriju izbacenog clana liste
     }
 
     else if (strcmp(prezime, p->prezime) != 0)

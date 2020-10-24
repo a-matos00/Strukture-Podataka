@@ -1,8 +1,7 @@
 #include<stdio.h>
 #include<stdlib.h>
 
-#define ERROR_1 (-1)	//ako datoteka nije otvorena
-#define max_bod (float)150	//najveci moguci broj bodova
+#define MAX_BOD (float)150	//najveci moguci broj bodova
 
 typedef struct student {	//definirana je nova vrsta podatka "_student"
 	char ime[30];
@@ -18,21 +17,18 @@ int main()
 	FILE* fp = NULL;	//pokazivac na datoteku
 	_student* studenti;	//pokazivac na tip strukture 
 	int n = 0;	//broj studenata
-	int i = 0, j = 0;
-	float temp = 0;
+	int i = 0, j = 0;	//iteratori
 
 	fp = fopen("studenti.txt", "r");	//otvaramo datoteku
 
 	if (fp == NULL) {	//ako datoteka nije otvorena 
 		puts("GRESKA! Datoteka nije otvorena");
-		return ERROR_1;
+		return -1;
 	}
 
 	n = brojac_studenata(fp);	//funkcija vraca broj studenata
 
-	//printf("Broj studenata je %d\n",n); //provjera brojaca studenata
-
-	rewind(fp);	//pokazivac se vraca na pocetak datoteke
+	rewind(fp);	//cursor se vraca na pocetak datoteke
 
 	studenti = (_student*)malloc(sizeof(_student) * n);	//dinamicka alokacija niza struktura tipa _student
 
@@ -44,7 +40,7 @@ int main()
 	}
 
 	for (i = 0; i < n; i++) {
-		studenti[i].rel_bodovi = (studenti[i].bodovi / max_bod) * 100;
+		studenti[i].rel_bodovi = (studenti[i].bodovi / MAX_BOD) * 100;
 	}
 
 	for (i = 0; i < n; i++) {

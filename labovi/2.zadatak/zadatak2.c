@@ -1,6 +1,7 @@
 // strcmp(char[],char[]) --> funkcija usporeduje svaki znak u stringovima te vraca "0" ako su identicni
 //ako nisu vratit ce vrijednost koja nije nula
 
+//linux
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
@@ -11,14 +12,14 @@ typedef struct osoba {
     char ime[20];
     char prezime[20];
     int godina;
-    element* next; 
+    element next; 
 }_osoba;
 
-void ispis(element*); //funkcija ispisuje elemente
-void unosPocetak(element*); //funkcija dodaje novi element na pocetak liste
-void unosKraj(element*);    //funkcija unosi novi element na kraj liste
-void traziPrezime(element*);    //funkcija trazi element u listi po prezimenu
-void traziUkloni(element*); //funkcija trazi element po prezimenu te ga uklanja iz liste
+void ispis(element); //funkcija ispisuje elemente
+void unosPocetak(element); //funkcija dodaje novi element na pocetak liste
+void unosKraj(element);    //funkcija unosi novi element na kraj liste
+void traziPrezime(element);    //funkcija trazi element u listi po prezimenu
+void traziUkloni(element); //funkcija trazi element po prezimenu te ga uklanja iz liste
 
 int main()
 {
@@ -101,7 +102,7 @@ void traziPrezime(element p) //argument je adresa prvog stvarnog clan liste
 void traziUkloni(element p) //argument je adresa HEAD elementa
 {
     char prezime[20];
-    element temp = (element*)malloc(sizeof(_osoba));    //stvaramo privremenu varijablu koja sluzi za oznacavanje elementa koji prethodi trazenom clanu
+    element temp = (element)malloc(sizeof(_osoba));    //stvaramo privremenu varijablu koja sluzi za oznacavanje elementa koji prethodi trazenom clanu
 
     puts("Upisi prezime osobe koju zelis ukloniti:");
     scanf("%s", prezime);

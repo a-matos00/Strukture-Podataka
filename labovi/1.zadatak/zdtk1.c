@@ -10,12 +10,16 @@ typedef struct student {	//definirana je nova vrsta podatka "_student"
 	float rel_bodovi;
 }_student;
 
-int brojac_studenata(FILE*);	//funkcija vraca broj studenata
+int brojacStudenata(FILE*);	//funkcija vraca broj studenata
+_student* alocirajNiz(_student*, int);
+void ispis(_student*, int);
+void upis(FILE*, _student*, int);
+void relBod(_student*, int);
 
 int main()
 {
 	FILE* fp = NULL;	//pokazivac na datoteku
-	_student* studenti;	//pokazivac na tip strukture 
+	_student* studenti = NULL;	//pokazivac na tip strukture 
 	int n = 0;	//broj studenata
 	int i = 0, j = 0;	//iteratori
 
@@ -26,32 +30,23 @@ int main()
 		return -1;
 	}
 
-	n = brojac_studenata(fp);	//funkcija vraca broj studenata
+	n = brojacStudenata(fp);	//funkcija vraca broj studenata
 
 	rewind(fp);	//cursor se vraca na pocetak datoteke
 
-	studenti = (_student*)malloc(sizeof(_student) * n);	//dinamicka alokacija niza struktura tipa _student
+	studenti = alocirajNiz(studenti, n);	//dinamicka alokacija niza struktura tipa _student
 
-	//sljedeca petlja pohranjuje podatke studenata u strukture
-	i = 0;	//jako je bitno da je i = 0 prije izvrsavanja petlje
-	while (!feof(fp)) {
-		fscanf(fp, "%s %s %d", studenti[i].ime, studenti[i].prezime, &studenti[i].bodovi);	//skeniramo cijeli redak
-		i++;
-	}
+	upis(fp, studenti, n);	//prijenos podataka iz datoteke u niz struktura
+	
+	relBod(studenti, n);	//funkcija racuna relativne bodove studenata
 
-	for (i = 0; i < n; i++) {
-		studenti[i].rel_bodovi = (studenti[i].bodovi / MAX_BOD) * 100;
-	}
-
-	for (i = 0; i < n; i++) {
-		printf("%s %s %d %.2f\n", studenti[i].ime, studenti[i].prezime, studenti[i].bodovi, studenti[i].rel_bodovi);
-	}
+	ispis(studenti, n);	//ispis cijelog niza struktura
 
 	fclose(fp);	//zatvaramo datoteku
 }
 
 //sljedeca petlja broji retke jer je datoteka formatirana na nacin 1 redak = 1 student
-int brojac_studenata(FILE* fp) {
+int brojacStudenata(FILE* fp) {
 
 	int n = 0;
 
@@ -61,4 +56,42 @@ int brojac_studenata(FILE* fp) {
 	}
 
 	return n;
+}
+
+_student* alocirajNiz(_student* p, int n) {
+
+	p = (_student*)malloc(sizeof(_student) * n);
+
+	if (p == NULL) {
+		puts("Greška! Memorija nije alocirana");
+		return NULL;
+	}
+
+	return p;
+}
+
+void upis(FILE* fp, _student* p, int n)
+{
+	int i = 0;	
+	while (!feof(fp)) {
+		fscanf(fp, "%s %s %d", p[i].ime, p[i].prezime, &p[i].bodovi);	//skeniramo cijeli redak
+		i++;
+	}
+}
+
+void relBod(_student* p, int n) {
+	int i = 0;
+
+	for (i = 0; i < n; i++) {
+		p[i].rel_bodovi = (p[i].bodovi / MAX_BOD) * 100;
+	}
+}
+
+void ispis(_student* p, int n)
+{
+	int i = 0;
+
+	for (i = 0; i < n; i++) {
+		printf("%s %s %d %.2f\n", p[i].ime, p[i].prezime, p[i].bodovi, p[i].rel_bodovi);
+	}
 }

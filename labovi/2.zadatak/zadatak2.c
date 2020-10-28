@@ -25,10 +25,16 @@ int main()
     _osoba head;  //inicijalizacija pocetnog clana liste
     head.next = NULL; //postavljamo da prvi clan pokazuje na nista jer je trenutno jedini clan u listi
 
+    unosPocetak(&head);
+    unosPocetak(&head);
+    ispis(head.next);
+    unosKraj(&head);
     unosKraj(&head);
     ispis(head.next);
-    traziUkloni(&head);
+    traziPrezime(head.next);
+    traziUkloni(head.next);
     ispis(head.next);
+
 
     return 0;
 }

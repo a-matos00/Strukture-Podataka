@@ -151,9 +151,9 @@ int dodajIza(p_osoba p) //argument je prvi pravi clan liste
     p_osoba novi = (p_osoba*)malloc(sizeof(_osoba));    //alociramo memoriju za novi clan
 
     if (novi == NULL) {     //ako alokacija nije uspijel
-        return - 1;
+        return -1;
     }
-    
+
     p_osoba trazeni = traziPrezime(p);    //pronalazimo clan iza kojeg cemo dodati novi clan
 
     if (trazeni == NULL) {  //ako clan s trazenim prezimenom nije pronaden

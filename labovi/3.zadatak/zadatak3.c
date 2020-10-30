@@ -11,14 +11,16 @@ typedef struct osoba {
     p_osoba next;
 }_osoba;
 
+void unosPodataka(p_osoba);
 int ispis(p_osoba); //funkcija ispisuje clanove liste
 int unosPocetak(p_osoba); //funkcija dodaje novi clan na pocetak liste
 int unosKraj(p_osoba);    //funkcija unosi novi clan na kraj liste
 p_osoba traziPrezime(p_osoba);    //funkcija trazi clan u listi po prezimenu
+p_osoba traziPrethodni(p_osoba);    //funkcija trazi clan u listi po koji se nalazi ispred trazenog prezimena
 int traziUkloni(p_osoba); //funkcija trazi clan po prezimenu te ga uklanja iz liste
 int dodajIza(p_osoba);
-p_osoba traziPrethodni(p_osoba);    //funkcija trazi clan u listi po koji se nalazi ispred trazenog prezimena
 int dodajIspred(p_osoba);
+void sortiraj(p_osoba);
 
 int main()
 {
@@ -26,8 +28,10 @@ int main()
     head.next = NULL; //postavljamo da prvi clan pokazuje na nista jer je trenutno jedini clan u listi
    
     unosKraj(&head);
+    unosKraj(&head);
+    unosKraj(&head);
     ispis(head.next);
-    dodajIspred(&head);
+    sortiraj(&head);
     ispis(head.next);
 
     return 0;
@@ -42,12 +46,7 @@ int unosPocetak(p_osoba p) //u funkciju smo poslali adresu HEAD clana
         return -1;
     }
 
-    puts("Unesi ime:"); //unos podataka
-    scanf("%s", q->ime);
-    puts("Unesi prezime:");
-    scanf("%s", q->prezime);
-    puts("Unesi godinu rodenja:");
-    scanf("%d", &q->godina);
+    unosPodataka(q);
 
     q->next = p->next;  //dodani clan sada pokazuje na ono na sto je prije pokazivao HEAD clan
     p->next = q;  //HEAD clan sada pokazuje na dodani clan
@@ -64,12 +63,7 @@ int unosKraj(p_osoba p)    //argument je adresa HEAD clana
         return -1;
     }
 
-    puts("Unesi ime:"); //unos podataka
-    scanf("%s", q->ime);
-    puts("Unesi prezime:");
-    scanf("%s", q->prezime);
-    puts("Unesi godinu rodenja:");
-    scanf("%d", &q->godina);
+    unosPodataka(q);
 
     while (p->next != NULL) {   //dok ne dodemo do zadnjeg clana u listi
         p = p->next;    //prebacujemo se na sljedeci clan
@@ -105,15 +99,16 @@ p_osoba traziPrezime(p_osoba p) //argument je adresa prvog stvarnog clan liste
         p = p->next;    //prebacujemo se na sljedeci clan liste
     }
 
-    if (strcmp(prezime, p->prezime) == 0)   //ako smo pronasli trazeni clan
+    if (strcmp(prezime, p->prezime) == 0) {  //ako smo pronasli trazeni clan
         printf("p_osoba je pronaden: %s\t%s\t%d\n", p->ime, p->prezime, p->godina); //ispis trazenog clana
-
+        return p;
+    }
     else if (strcmp(prezime, p->prezime) != 0)  //ako trazeni clan nije pronaden
     {
         puts("Trazeno prezime ne postoji u listi"); //prigodna poruka
         return NULL;
     }
-    return p;
+    
 }
 
 int traziUkloni(p_osoba p) //argument je adresa HEAD clana
@@ -163,12 +158,7 @@ int dodajIza(p_osoba p) //argument je prvi pravi clan liste
     novi->next = trazeni->next;
     trazeni->next = novi;
 
-    puts("Unesi ime:");     //unos podataka
-    scanf("%s", novi->ime);
-    puts("Unesi prezime:");
-    scanf("%s", novi->prezime);
-    puts("Unesi godinu rodenja:");
-    scanf("%d", &novi->godina);
+    unosPodataka(novi);
 
     return 0;
 }
@@ -188,40 +178,80 @@ p_osoba traziPrethodni(p_osoba p) //argument je adresa prvog stvarnog clan liste
         p = p->next;    //prebacujemo se na sljedeci clan liste
     }
 
-    if (strcmp(prezime, p->prezime) == 0)   //ako smo pronasli trazeni clan
+    if (strcmp(prezime, p->prezime) == 0) {  //ako smo pronasli trazeni clan
         printf("p_osoba je pronaden: %s\t%s\t%d\n", p->ime, p->prezime, p->godina); //ispis trazenog clana
+        return prethodni;
+    }
 
     else if (strcmp(prezime, p->prezime) != 0)  //ako trazeni clan nije pronaden
     {
         puts("Trazeno prezime ne postoji u listi"); //prigodna poruka
         return NULL;
     }
-    return prethodni;
+  
 }
 
 int dodajIspred(p_osoba p) //argument je prvi pravi clan liste
 {
-    p_osoba novi = (p_osoba*)malloc(sizeof(_osoba));    //alociramo memoriju za novi clan
+    p_osoba prethodni, novi;
 
-    if (novi == NULL) {     //ako alokacija nije uspijel
-        return -1;
-    }
-
-    p_osoba prethodni = traziPrethodni(p);    //pronalazimo clan iza kojeg cemo dodati novi clan
+    prethodni = traziPrethodni(p);    //pronalazimo clan iza kojeg cemo dodati novi clan
 
     if (prethodni == NULL) {  //ako clan s trazenim prezimenom nije pronaden
         return -1;
     }
 
+    novi = (p_osoba*)malloc(sizeof(_osoba));    //alociramo memoriju za novi clan
+
+    if (novi == NULL) {     //ako alokacija nije uspijela
+        puts("GRESKA!!! Alokacija memorije za novi clan nije uspjela");
+        return -1;
+    }
+
+    unosPodataka(novi);
+
     novi->next = prethodni->next;
     prethodni->next = novi;
 
-    puts("Unesi ime:");     //unos podataka
-    scanf("%s", novi->ime);
-    puts("Unesi prezime:");
-    scanf("%s", novi->prezime);
-    puts("Unesi godinu rodenja:");
-    scanf("%d", &novi->godina);
-
     return 0;
+}
+
+void unosPodataka(p_osoba p)
+{
+    puts("Unesi ime:");     //unos podataka u novi clan
+    scanf("%s", p->ime);
+    puts("Unesi prezime:");
+    scanf("%s", p->prezime);
+    puts("Unesi godinu rodenja:");
+    scanf("%d", &p->godina);
+
+}
+
+void sortiraj(p_osoba p)
+{
+    p_osoba  j, prev, temp, end;
+    
+    end = NULL;
+
+    while (p->next != end)
+    {
+        prev = p;
+        j = p->next;
+
+        while (j->next != end)
+        {
+            if (strcmp(j->prezime, j->next->prezime) > 0) {
+
+                temp = j->next;
+                prev->next = temp;
+                j->next = temp->next;
+                temp->next = j;
+
+                j = temp;
+            }
+            prev = j;
+            j = j->next;
+        }
+        end = j;
+    }
 }

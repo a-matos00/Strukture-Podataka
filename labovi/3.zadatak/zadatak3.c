@@ -20,14 +20,11 @@ int dodajIza(p_osoba);
 p_osoba traziPrethodni(p_osoba);    //funkcija trazi clan u listi po koji se nalazi ispred trazenog prezimena
 int dodajIspred(p_osoba);
 
-
 int main()
 {
-    FILE* fp;
     _osoba head;  //inicijalizacija pocetnog clana liste
     head.next = NULL; //postavljamo da prvi clan pokazuje na nista jer je trenutno jedini clan u listi
-
-    
+   
     unosKraj(&head);
     ispis(head.next);
     dodajIspred(&head);
@@ -227,11 +224,4 @@ int dodajIspred(p_osoba p) //argument je prvi pravi clan liste
     scanf("%d", &novi->godina);
 
     return 0;
-}
-
-FILE* openFILE()
-{
-    FILE* fp;
-
-    fp = fopen("lista.txt", "w");
 }

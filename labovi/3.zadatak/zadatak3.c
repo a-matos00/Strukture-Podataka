@@ -21,18 +21,20 @@ int traziUkloni(p_osoba); //funkcija trazi clan po prezimenu te ga uklanja iz li
 int dodajIza(p_osoba);
 int dodajIspred(p_osoba);
 void sortiraj(p_osoba);
+void uDatoteku(p_osoba);
 
 int main()
 {
     _osoba head;  //inicijalizacija pocetnog clana liste
     head.next = NULL; //postavljamo da prvi clan pokazuje na nista jer je trenutno jedini clan u listi
-   
+
+    
     unosKraj(&head);
     unosKraj(&head);
     unosKraj(&head);
     ispis(head.next);
-    sortiraj(&head);
-    ispis(head.next);
+
+    uDatoteku(head.next);
 
     return 0;
 }
@@ -254,4 +256,19 @@ void sortiraj(p_osoba p)
         }
         end = j;
     }
+}
+
+void uDatoteku(p_osoba p)
+{
+    FILE* fp = NULL;
+
+    fp = fopen("osobe.txt", "w");
+
+    while (p != NULL) {
+        fprintf(fp, "%s\t%s\t%d\n", p->ime, p->ime, p->godina);
+
+        p = p->next;
+    }
+
+    puts("GOTOVO!");
 }

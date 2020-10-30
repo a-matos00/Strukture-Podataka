@@ -22,19 +22,16 @@ int dodajIza(p_osoba);
 int dodajIspred(p_osoba);
 void sortiraj(p_osoba);
 void uDatoteku(p_osoba);
+void izDatoteke(p_osoba);
+int brojac(FILE*);
 
 int main()
 {
     _osoba head;  //inicijalizacija pocetnog clana liste
     head.next = NULL; //postavljamo da prvi clan pokazuje na nista jer je trenutno jedini clan u listi
 
-    
-    unosKraj(&head);
-    unosKraj(&head);
-    unosKraj(&head);
+    izDatoteke(&head);
     ispis(head.next);
-
-    uDatoteku(head.next);
 
     return 0;
 }
@@ -265,10 +262,52 @@ void uDatoteku(p_osoba p)
     fp = fopen("osobe.txt", "w");
 
     while (p != NULL) {
-        fprintf(fp, "%s\t%s\t%d\n", p->ime, p->ime, p->godina);
+        fprintf(fp, "%s\t%s\t%d\n", p->ime, p->prezime, p->godina);
 
         p = p->next;
     }
 
     puts("GOTOVO!");
 }
+
+void izDatoteke(p_osoba p)
+{
+    p_osoba novi;
+    int n = 0;
+    int i = 0;
+    FILE* fp = NULL;
+    
+    fp = fopen("osobe.txt", "r");
+
+    n = brojac(fp);
+
+    rewind(fp);
+
+    while (!feof(fp)) {
+
+        //if (n == i)
+          //  break;
+
+            novi = (p_osoba)malloc(sizeof(_osoba));
+            fscanf(fp, "%s%s%d", novi->ime, novi->prezime, &novi->godina);
+            
+            novi->next = p->next;
+            p->next = novi; 
+           // i++;
+    }
+
+    puts("GOTOVO!");
+}
+
+int brojac(FILE* fp) {
+
+    int n = 0;
+
+    while (!feof(fp)) {
+        if (fgetc(fp) == '\n')	//treba pripaziti na to da nakon broja bodova zadnjeg studenta u datoteci mora bit stisnut "enter"
+            n++;
+    }
+
+    return n;
+}
+

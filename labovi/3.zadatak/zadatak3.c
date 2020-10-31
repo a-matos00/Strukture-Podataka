@@ -21,16 +21,21 @@ int traziUkloni(p_osoba); //funkcija trazi clan po prezimenu te ga uklanja iz li
 int dodajIza(p_osoba);
 int dodajIspred(p_osoba);
 void sortiraj(p_osoba);
-void uDatoteku(p_osoba);
-void izDatoteke(p_osoba);
-int brojac(FILE*);
+int uDatoteku(p_osoba);
+int izDatoteke(p_osoba);
 
 int main()
 {
     _osoba head;  //inicijalizacija pocetnog clana liste
+    _osoba ucitano;
     head.next = NULL; //postavljamo da prvi clan pokazuje na nista jer je trenutno jedini clan u listi
+    ucitano.next = NULL;
 
-    izDatoteke(&head);
+    unosPocetak(&head);
+    unosPocetak(&head);
+    uDatoteku(head.next);
+    ispis(head.next);
+    izDatoteke(&ucitano);
     ispis(head.next);
 
     return 0;
@@ -255,59 +260,60 @@ void sortiraj(p_osoba p)
     }
 }
 
-void uDatoteku(p_osoba p)
+int uDatoteku(p_osoba p)
 {
     FILE* fp = NULL;
 
     fp = fopen("osobe.txt", "w");
 
+    if (fp == NULL) {
+        puts("GRESKA!!! Datoteka nije otvorena!");
+        return -1;
+    }
+
     while (p != NULL) {
+        if (p->next == NULL) {
+            fprintf(fp, "%s\t%s\t%d", p->ime, p->prezime, p->godina);
+            break;
+       }
         fprintf(fp, "%s\t%s\t%d\n", p->ime, p->prezime, p->godina);
 
         p = p->next;
     }
 
-    puts("GOTOVO!");
+    puts("Upis u datoteku je zavrsen");
+
+    return 0;
 }
 
-void izDatoteke(p_osoba p)
+int izDatoteke(p_osoba p)
 {
-    p_osoba novi;
-    int n = 0;
-    int i = 0;
+    p_osoba novi, temp;
     FILE* fp = NULL;
     
     fp = fopen("osobe.txt", "r");
 
-    n = brojac(fp);
+    if (fp == NULL) {
+        puts("GRESKA!!! Datoteka nije otvorena!");
+        return -1;
+    }
 
-    rewind(fp);
+    temp = p;
+    temp->next = p->next;
 
     while (!feof(fp)) {
 
-        //if (n == i)
-          //  break;
-
-            novi = (p_osoba)malloc(sizeof(_osoba));
-            fscanf(fp, "%s%s%d", novi->ime, novi->prezime, &novi->godina);
+        novi = (p_osoba)malloc(sizeof(_osoba));
+        fscanf(fp, "%s%s%d", novi->ime, novi->prezime, &novi->godina);
             
-            novi->next = p->next;
-            p->next = novi; 
-           // i++;
+        novi->next = temp->next;    //unos na kraj liste
+        temp->next = novi; 
+        temp = novi;
     }
 
-    puts("GOTOVO!");
+    puts("Unos iz datoteke je zavrsen");
+    return 0;
 }
 
-int brojac(FILE* fp) {
 
-    int n = 0;
-
-    while (!feof(fp)) {
-        if (fgetc(fp) == '\n')	//treba pripaziti na to da nakon broja bodova zadnjeg studenta u datoteci mora bit stisnut "enter"
-            n++;
-    }
-
-    return n;
-}
 

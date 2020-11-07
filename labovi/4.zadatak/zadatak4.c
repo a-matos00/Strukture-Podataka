@@ -47,11 +47,13 @@ int main()
 
 int mnoziPol(p_clan p1, p_clan p2, p_clan rez)
 {
-	p_clan novi, rez_HEAD, p2_start;
+	p_clan novi, rez_HEAD, p2_start, temp, i;
 
+	temp = rez;
+	rez_HEAD = rez;
 	p2_start = p2;
 
-	if (p1 == NULL || p2 == NULL || rez == NULL) {
+	if (p1 == NULL || p2 == NULL || rez == NULL) {	//provjera
 		puts("GREŠKA! Jedan od pokazivaca na polinom je NULL");
 		return -1;
 	}
@@ -66,6 +68,7 @@ int mnoziPol(p_clan p1, p_clan p2, p_clan rez)
 			novi->exp = (p1->exp + p2->exp);	//unos podataka
 			novi->koef = (p1->koef * p2->koef);
 
+
 			novi->next = rez->next;
 			rez->next = novi;
 
@@ -76,6 +79,7 @@ int mnoziPol(p_clan p1, p_clan p2, p_clan rez)
 		p1 = p1->next;
 		p2 = p2_start;
 	}
+
 	return 0;
 }
 
@@ -89,8 +93,9 @@ int citajIzDat(FILE* fp, p_clan p1, p_clan p2)
 	buffer_size = bufferSize(fp);
 
 	buffer = (char*)calloc(buffer_size, sizeof(char));	//ALOKACIJA BUFFERA
-	fread(buffer, buffer_size, 1, fp);
+	fread(buffer, buffer_size, 1, fp);	//tekst se upisuje u buffer
 
+	fclose(fp);
 	//printf("DULJINA BUFFERA JE %d\n", strlen(buffer)); //provjera duljine buffera
 	printf("ISPIS BUFFERA:\n %s\n", buffer);	//PROVJERA BUFFERA
 
@@ -99,8 +104,6 @@ int citajIzDat(FILE* fp, p_clan p1, p_clan p2)
 	buffer = (buffer + offset);
 
 	ucitajPol(buffer, p2, novi);
-
-	rewind(fp);
 
 	return 0;
 }
@@ -154,9 +157,10 @@ int ucitajPol(char* buffer, p_clan p, p_clan novi)
 }
 
 
-
 int zbrojiPol(p_clan p1, p_clan p2, p_clan rez) {
-	p_clan novi;
+	p_clan novi, rez_HEAD;
+
+	rez_HEAD = rez;
 
 	while (p1 != NULL && p2 != NULL) {
 		if (p1->exp < p2->exp) {
@@ -237,3 +241,4 @@ int zbrojiPol(p_clan p1, p_clan p2, p_clan rez) {
 
 	return 0;
 }
+

@@ -3,12 +3,13 @@
 #include<string.h>
 #include "header.h"
 
-int CitajIzDat(FILE*, p_clan, p_clan);
+int citajIzDat(FILE*, p_clan, p_clan);
 int ispis(p_clan);
 int bufferSize(FILE*);
 int ucitajPol(char*, p_clan, p_clan);
 int sortiraniUnos(p_clan);
 int zbrojiPol(p_clan, p_clan, p_clan);
+int mnoziPol(p_clan, p_clan, p_clan);
 
 int main()
 {
@@ -27,7 +28,7 @@ int main()
 		return -1;
 	}
 
-	CitajIzDat(fp, &p1_HEAD, &p2_HEAD);
+	citajIzDat(fp, &p1_HEAD, &p2_HEAD);
 
 	printf("Ispis prvog polinoma: ");
 	ispis(p1_HEAD.next);
@@ -35,8 +36,8 @@ int main()
 	printf("Ispis drugog polinoma: ");
 	ispis(p2_HEAD.next);
 
-	
-	zbrojiPol(p1_HEAD.next, p2_HEAD.next, &rez_HEAD);
+	//zbrojiPol(p1_HEAD.next, p2_HEAD.next, &rez_HEAD);
+	mnoziPol(p1_HEAD.next, p2_HEAD.next, &rez_HEAD);
 
 	printf("Ispis zbroja: ");
 	ispis(rez_HEAD.next);
@@ -44,9 +45,41 @@ int main()
 	return 0;
 }
 
+int mnoziPol(p_clan p1, p_clan p2, p_clan rez)
+{
+	p_clan novi, rez_HEAD, p2_start;
 
+	p2_start = p2;
 
-int izDat(FILE* fp, p_clan p1, p_clan p2)
+	if (p1 == NULL || p2 == NULL || rez == NULL) {
+		puts("GREŠKA! Jedan od pokazivaca na polinom je NULL");
+		return -1;
+	}
+
+	while (p1 != NULL)
+	{
+
+		while (p2 != NULL)
+		{
+			novi = (p_clan)malloc(sizeof(_clan));
+
+			novi->exp = (p1->exp + p2->exp);	//unos podataka
+			novi->koef = (p1->koef * p2->koef);
+
+			novi->next = rez->next;
+			rez->next = novi;
+
+			p2 = p2->next;
+			rez = rez->next;
+		}
+		
+		p1 = p1->next;
+		p2 = p2_start;
+	}
+	return 0;
+}
+
+int citajIzDat(FILE* fp, p_clan p1, p_clan p2)
 {
 	int buffer_size = 0;
 	p_clan novi = NULL;
@@ -201,7 +234,6 @@ int zbrojiPol(p_clan p1, p_clan p2, p_clan rez) {
 		}
 
 	}
-
 
 	return 0;
 }

@@ -1,21 +1,14 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
+#include "header.h"
 
-typedef struct clan* p_clan;
-
-typedef struct clan {
-	int koef;
-	int exp;
-	p_clan next;
-}_clan;
-
-int izDat(FILE*, p_clan, p_clan);
+int CitajIzDat(FILE*, p_clan, p_clan);
 int ispis(p_clan);
 int bufferSize(FILE*);
 int ucitajPol(char*, p_clan, p_clan);
 int sortiraniUnos(p_clan);
-int zbroji(p_clan, p_clan, p_clan);
+int zbrojiPol(p_clan, p_clan, p_clan);
 
 int main()
 {
@@ -34,16 +27,24 @@ int main()
 		return -1;
 	}
 
-	izDat(fp, &p1_HEAD, &p2_HEAD);
+	CitajIzDat(fp, &p1_HEAD, &p2_HEAD);
+
+	printf("Ispis prvog polinoma: ");
 	ispis(p1_HEAD.next);
-	puts("");
+
+	printf("Ispis drugog polinoma: ");
 	ispis(p2_HEAD.next);
-	puts("");
-	zbroji(p1_HEAD.next, p2_HEAD.next, &rez_HEAD);
+
+	
+	zbrojiPol(p1_HEAD.next, p2_HEAD.next, &rez_HEAD);
+
+	printf("Ispis zbroja: ");
 	ispis(rez_HEAD.next);
 
 	return 0;
 }
+
+
 
 int izDat(FILE* fp, p_clan p1, p_clan p2)
 {
@@ -51,11 +52,11 @@ int izDat(FILE* fp, p_clan p1, p_clan p2)
 	p_clan novi = NULL;
 	char* buffer = NULL;
 	int offset = 0, exp = 0, koef = 0, r = 0;
-	
+
 	buffer_size = bufferSize(fp);
 
 	buffer = (char*)calloc(buffer_size, sizeof(char));	//ALOKACIJA BUFFERA
-	fread(buffer, buffer_size,1, fp);
+	fread(buffer, buffer_size, 1, fp);
 
 	//printf("DULJINA BUFFERA JE %d\n", strlen(buffer)); //provjera duljine buffera
 	printf("ISPIS BUFFERA:\n %s\n", buffer);	//PROVJERA BUFFERA
@@ -67,24 +68,6 @@ int izDat(FILE* fp, p_clan p1, p_clan p2)
 	ucitajPol(buffer, p2, novi);
 
 	rewind(fp);
-
-	return 0;
-}
-
-int ispis(p_clan p)
-{
-	puts("ISPIS LISTE:");
-
-	if (p == NULL) {
-		puts("Prazna lista!");
-		return -1;
-	}
-
-	while (p != NULL)   //petlja se odvija dok ne dodemo do zadnjeg clana( zadnji clan pokazuje na "nista" jer nema svog sljedbenika unutar liste dok svi ostali imaju)
-	{
-		printf("%dx^%d ", p->koef, p->exp); //ispis podataka trenutnog clana liste
-		p = p->next;    //prebacujemo se na sljedeci clan u listi
-	}
 
 	return 0;
 }
@@ -137,33 +120,10 @@ int ucitajPol(char* buffer, p_clan p, p_clan novi)
 	return offset;
 }
 
-int sortiraniUnos(p_clan novi, p_clan p)
-{
-	p_clan head = NULL;
-	head = p;
 
-	if (p->next == NULL) {
-		novi->next = p->next;
-		p->next = novi;
-	}
 
-	else {
-		while (p->next != NULL && p->next->exp < novi->exp) {
-			p = p->next;
-		}
-
-		novi->next = p->next;
-		p->next = novi;
-	}
-	p = head;
-
-	return 0;
-}
-
-int zbroji(p_clan p1, p_clan p2, p_clan rez) {
+int zbrojiPol(p_clan p1, p_clan p2, p_clan rez) {
 	p_clan novi;
-	p_clan x = p1;
-	p_clan rez_HEAD = rez;
 
 	while (p1 != NULL && p2 != NULL) {
 		if (p1->exp < p2->exp) {
@@ -178,8 +138,6 @@ int zbroji(p_clan p1, p_clan p2, p_clan rez) {
 			p1 = p1->next;
 
 			rez = rez->next;
-			puts("UPISAN P1");
-			ispis(rez_HEAD->next);
 		}
 
 		else if (p1->exp > p2->exp) {
@@ -193,8 +151,6 @@ int zbroji(p_clan p1, p_clan p2, p_clan rez) {
 
 			p2 = p2->next;
 			rez = rez->next;
-			puts("UPISAN P2");
-			ispis(rez_HEAD->next);
 		}
 
 		else if (p1->exp == p2->exp) {
@@ -208,15 +164,44 @@ int zbroji(p_clan p1, p_clan p2, p_clan rez) {
 
 			p1 = p1->next;
 			p2 = p2->next;
+
 			rez = rez->next;
-			puts("ZBROJENI P2");
-			ispis(rez_HEAD->next);
 		}
-		puts("ITERACIJA");
+		
 	}
+
+	if (p1 != NULL) {
+		while (p1 != NULL) {
+			novi = (p_clan)malloc(sizeof(_clan));
+
+			novi->koef = p1->koef;
+			novi->exp = p1->exp;
+
+			novi->next = rez->next;	//dodaje se u listu
+			rez->next = novi;
+
+			p1 = p1->next;
+			rez = rez->next;
+		}
+
+	}
+
+	if (p2 != NULL) {
+		while (p2 != NULL) {
+			novi = (p_clan)malloc(sizeof(_clan));
+
+			novi->koef = p2->koef;
+			novi->exp = p2->exp;
+
+			novi->next = rez->next;	//dodaje se u listu
+			rez->next = novi;
+
+			p2 = p2->next;
+			rez = rez->next;
+		}
+
+	}
+
 
 	return 0;
 }
-
-
-

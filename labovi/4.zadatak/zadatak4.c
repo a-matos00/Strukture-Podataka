@@ -15,17 +15,17 @@ int ispis(p_clan);
 int bufferSize(FILE*);
 int ucitajPol(char*, p_clan, p_clan);
 int sortiraniUnos(p_clan);
-p_clan zbroji(p_clan, p_clan);
+int zbroji(p_clan, p_clan, p_clan);
 
 int main()
 {
 	FILE* fp;
 
-	_clan p1_HEAD, p2_HEAD;
-	p_clan rez_HEAD = NULL;
+	_clan p1_HEAD, p2_HEAD, rez_HEAD;
 
 	p1_HEAD.next = NULL;
 	p2_HEAD.next = NULL;
+	rez_HEAD.next = NULL;
 
 	fp = fopen("datoteka.txt", "r");
 
@@ -38,7 +38,9 @@ int main()
 	ispis(p1_HEAD.next);
 	puts("");
 	ispis(p2_HEAD.next);
-	//rez_HEAD = zbroji(&p1_HEAD.next, &p2_HEAD.next);
+	puts("");
+	zbroji(p1_HEAD.next, p2_HEAD.next, &rez_HEAD);
+	ispis(rez_HEAD.next);
 
 	return 0;
 }
@@ -158,13 +160,62 @@ int sortiraniUnos(p_clan novi, p_clan p)
 	return 0;
 }
 
-p_clan zbroji(p_clan p1, p_clan p2) {
-	p_clan rez = NULL, rez_HEAD;
-	rez->next = NULL;
+int zbroji(p_clan p1, p_clan p2, p_clan rez) {
+	p_clan novi;
+	p_clan x = p1;
+	p_clan rez_HEAD = rez;
 
-	rez_HEAD = rez;	//head element liste zbroja
+	while (p1 != NULL && p2 != NULL) {
+		if (p1->exp < p2->exp) {
+			novi = (p_clan)malloc(sizeof(_clan));	//stvara se novi clan
 
-	return rez_HEAD;
+			novi->exp = p1->exp;	//unos podataka
+			novi->koef = p1->koef;
+
+			novi->next = rez->next;	//dodaje se u listu
+			rez->next = novi;
+
+			p1 = p1->next;
+
+			rez = rez->next;
+			puts("UPISAN P1");
+			ispis(rez_HEAD->next);
+		}
+
+		else if (p1->exp > p2->exp) {
+			novi = (p_clan)malloc(sizeof(_clan));	//stvara se novi clan
+
+			novi->exp = p2->exp;	//unos podataka
+			novi->koef = p2->koef;
+
+			novi->next = rez->next;	//dodaje se u listu
+			rez->next = novi;
+
+			p2 = p2->next;
+			rez = rez->next;
+			puts("UPISAN P2");
+			ispis(rez_HEAD->next);
+		}
+
+		else if (p1->exp == p2->exp) {
+			novi = (p_clan)malloc(sizeof(_clan));	//stvara se novi clan
+
+			novi->exp = p2->exp;	//unos podataka
+			novi->koef = p2->koef + p1->koef;
+
+			novi->next = rez->next;	//dodaje se u listu
+			rez->next = novi;
+
+			p1 = p1->next;
+			p2 = p2->next;
+			rez = rez->next;
+			puts("ZBROJENI P2");
+			ispis(rez_HEAD->next);
+		}
+		puts("ITERACIJA");
+	}
+
+	return 0;
 }
 
 

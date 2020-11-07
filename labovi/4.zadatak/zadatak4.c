@@ -14,12 +14,15 @@ int izDat(FILE*, p_clan, p_clan);
 int ispis(p_clan);
 int bufferSize(FILE*);
 int ucitajPol(char*, p_clan, p_clan);
+int sortiraniUnos(p_clan);
+p_clan zbroji(p_clan, p_clan);
 
 int main()
 {
 	FILE* fp;
 
 	_clan p1_HEAD, p2_HEAD;
+	p_clan rez_HEAD = NULL;
 
 	p1_HEAD.next = NULL;
 	p2_HEAD.next = NULL;
@@ -35,6 +38,7 @@ int main()
 	ispis(p1_HEAD.next);
 	puts("");
 	ispis(p2_HEAD.next);
+	//rez_HEAD = zbroji(&p1_HEAD.next, &p2_HEAD.next);
 
 	return 0;
 }
@@ -44,7 +48,7 @@ int izDat(FILE* fp, p_clan p1, p_clan p2)
 	int buffer_size = 0;
 	p_clan novi = NULL;
 	char* buffer = NULL;
-	int n = 0, exp = 0, koef = 0, r = 0;
+	int offset = 0, exp = 0, koef = 0, r = 0;
 	
 	buffer_size = bufferSize(fp);
 
@@ -52,12 +56,11 @@ int izDat(FILE* fp, p_clan p1, p_clan p2)
 	fread(buffer, buffer_size,1, fp);
 
 	//printf("DULJINA BUFFERA JE %d\n", strlen(buffer)); //provjera duljine buffera
-	printf("ISPIS BUFFERA: %s\n", buffer);	//PROVJERA BUFFERA
+	printf("ISPIS BUFFERA:\n %s\n", buffer);	//PROVJERA BUFFERA
 
-	n = ucitajPol(buffer, p1, novi);
-	printf("OFFSET JE %d\n", n);
+	offset = ucitajPol(buffer, p1, novi);
 
-	buffer = (buffer + n);
+	buffer = (buffer + offset);
 
 	ucitajPol(buffer, p2, novi);
 
@@ -105,20 +108,13 @@ int ucitajPol(char* buffer, p_clan p, p_clan novi)
 	while (buffer != EOF) {
 		r = sscanf(buffer, "%dx^%d +%n", &koef, &exp, &n);
 
-		printf("PROCITANO koef = %d exp = %d n = %d ", koef, exp, n);
-
 		if (r == EOF) {
 			puts("GRESKA U CITANJU");
 			return -1;
 		}
 
 		if (r == 0) {	// procitan redak
-			puts("Pozvan uvjet za 0, prekid petlje");
 			break;
-		}
-
-		else if (r != EOF) {
-			puts("SSCANF USPJESAN");
 		}
 
 		offset += n;
@@ -127,31 +123,48 @@ int ucitajPol(char* buffer, p_clan p, p_clan novi)
 
 		novi = (p_clan)malloc(sizeof(_clan)); //stvaramo novu strukturu
 
-		novi->koef = koef;
+		novi->koef = koef;	//unos podataka u novi clan
 		novi->exp = exp;
 
-		if (p->next == NULL) {
-			novi->next = p->next;
-			p->next = novi;
-
-		}
-
-		else {
-			while (p->next != NULL && p->next->exp < novi->exp) {
-				p = p->next;
-			}
-
-			novi->next = p->next;
-			p->next = novi;
-		}
-		p = head;
-
+		sortiraniUnos(novi, p);
 
 	}
 
 	offset -= 1;	//kod cita 1 offset viska
 
 	return offset;
+}
+
+int sortiraniUnos(p_clan novi, p_clan p)
+{
+	p_clan head = NULL;
+	head = p;
+
+	if (p->next == NULL) {
+		novi->next = p->next;
+		p->next = novi;
+	}
+
+	else {
+		while (p->next != NULL && p->next->exp < novi->exp) {
+			p = p->next;
+		}
+
+		novi->next = p->next;
+		p->next = novi;
+	}
+	p = head;
+
+	return 0;
+}
+
+p_clan zbroji(p_clan p1, p_clan p2) {
+	p_clan rez = NULL, rez_HEAD;
+	rez->next = NULL;
+
+	rez_HEAD = rez;	//head element liste zbroja
+
+	return rez_HEAD;
 }
 
 

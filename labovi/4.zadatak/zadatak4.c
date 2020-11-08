@@ -39,7 +39,7 @@ int main()
 	//zbrojiPol(p1_HEAD.next, p2_HEAD.next, &rez_HEAD);
 	mnoziPol(p1_HEAD.next, p2_HEAD.next, &rez_HEAD);
 
-	printf("Ispis zbroja: ");
+	printf("Ispis rezultata: ");
 	ispis(rez_HEAD.next);
 
 	return 0;
@@ -97,7 +97,7 @@ int citajIzDat(FILE* fp, p_clan p1, p_clan p2)
 
 	fclose(fp);
 	//printf("DULJINA BUFFERA JE %d\n", strlen(buffer)); //provjera duljine buffera
-	printf("ISPIS BUFFERA:\n %s\n", buffer);	//PROVJERA BUFFERA
+	printf("ISPIS BUFFERA:\n%s\n", buffer);	//PROVJERA BUFFERA
 
 	offset = ucitajPol(buffer, p1, novi);
 
@@ -123,24 +123,26 @@ int bufferSize(FILE* fp) {
 int ucitajPol(char* buffer, p_clan p, p_clan novi)
 {
 	int koef, exp, n, r;
-	int offset = 0;
+	int offset = 0;	//pomak u stringu
 	p_clan head = p;
 
 	while (buffer != EOF) {
-		r = sscanf(buffer, "%dx^%d +%n", &koef, &exp, &n);
+		r = sscanf(buffer, "%d %d%n", &koef, &exp, &n);
 
-		if (r == EOF) {
-			puts("GRESKA U CITANJU");
+		if (r == EOF) {		//kraj datoteke
+			puts("KRAJ DATOTEKE");
 			return -1;
 		}
 
-		if (r == 0) {	// procitan redak
+		if (r == 0) {	//nije u formatu
+			puts("POGRESAN FORMAT");
 			break;
 		}
 
 		offset += n;
 
 		buffer = (buffer + n);	//pomicemo pokazivac buffera na ono mjesto do kojeg smo obavili sscanf
+		
 
 		novi = (p_clan)malloc(sizeof(_clan)); //stvaramo novu strukturu
 
@@ -149,9 +151,13 @@ int ucitajPol(char* buffer, p_clan p, p_clan novi)
 
 		sortiraniUnos(novi, p);
 
+		if (*buffer == '\n') {	//ako smo ucitali cijeli prvi redak("polinom")
+			break;
+		}
+
 	}
 
-	offset -= 1;	//kod cita 1 offset viska
+	offset += 1;	//kod cita 1 offset viska
 
 	return offset;
 }

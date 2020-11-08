@@ -10,6 +10,7 @@ int ucitajPol(char*, p_clan, p_clan);
 int sortiraniUnos(p_clan);
 int zbrojiPol(p_clan, p_clan, p_clan);
 int mnoziPol(p_clan, p_clan, p_clan);
+int srediPol(p_clan);
 
 int main()
 {
@@ -36,10 +37,14 @@ int main()
 	printf("Ispis drugog polinoma: ");
 	ispis(p2_HEAD.next);
 
+	//zakomentirat oni koji se ne koristi
 	//zbrojiPol(p1_HEAD.next, p2_HEAD.next, &rez_HEAD);
 	mnoziPol(p1_HEAD.next, p2_HEAD.next, &rez_HEAD);
+	printf("Ispis prije sredivanja: ");
+	ispis(rez_HEAD.next);
 
-	printf("Ispis rezultata: ");
+	srediPol(&rez_HEAD);
+	printf("Ispis konacnog rezultata: ");
 	ispis(rez_HEAD.next);
 
 	return 0;
@@ -47,12 +52,11 @@ int main()
 
 int mnoziPol(p_clan p1, p_clan p2, p_clan rez)
 {
-	p_clan novi, rez_HEAD, p2_start, temp, rez_mn;
+	p_clan novi, rez_HEAD, p2_start;
 
-	temp = rez;
 	rez_HEAD = rez;
 	p2_start = p2;
-	rez_mn = rez;
+	
 
 	if (p1 == NULL || p2 == NULL || rez == NULL) {	//provjera
 		puts("GREŠKA! Jedan od pokazivaca na polinom je NULL");
@@ -78,6 +82,35 @@ int mnoziPol(p_clan p1, p_clan p2, p_clan rez)
 		p2 = p2_start;
 	}
 
+	return 0;
+}
+
+int srediPol(p_clan p_HEAD)
+{
+	p_clan prev, curr, fol;	//prethodni, trenutni, sljedeci
+
+	prev = p_HEAD;
+	curr = p_HEAD->next;
+	fol = curr->next;
+
+	while (fol != NULL)
+	{
+		if (curr->exp == fol->exp) {	//ako su eksponenti jednaki
+			fol->koef += curr->koef;	//zbroj koef unosimo u sljedeci
+
+			prev->next = fol;	//trenutni se iskljucuje iz liste
+			free(curr);	//oslobada se memorija trenutnog
+
+			curr = fol;	//sljedeci postaje trenutni
+			fol = fol->next;	//novi sljedeci element
+			prev = prev;	//prethodni ostaje isti
+		}
+		else {
+			prev = curr;	//trenutni postaje prethodni
+			curr = fol;	//novi trenutni
+			fol = fol->next; //novi sljedeci
+		}
+	}
 	return 0;
 }
 

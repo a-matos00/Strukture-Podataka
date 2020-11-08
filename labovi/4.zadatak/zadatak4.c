@@ -47,11 +47,12 @@ int main()
 
 int mnoziPol(p_clan p1, p_clan p2, p_clan rez)
 {
-	p_clan novi, rez_HEAD, p2_start, temp, i;
+	p_clan novi, rez_HEAD, p2_start, temp, rez_mn;
 
 	temp = rez;
 	rez_HEAD = rez;
 	p2_start = p2;
+	rez_mn = rez;
 
 	if (p1 == NULL || p2 == NULL || rez == NULL) {	//provjera
 		puts("GREŠKA! Jedan od pokazivaca na polinom je NULL");
@@ -68,12 +69,9 @@ int mnoziPol(p_clan p1, p_clan p2, p_clan rez)
 			novi->exp = (p1->exp + p2->exp);	//unos podataka
 			novi->koef = (p1->koef * p2->koef);
 
-
-			novi->next = rez->next;
-			rez->next = novi;
+			sortiraniUnos(novi, rez_HEAD);
 
 			p2 = p2->next;
-			rez = rez->next;
 		}
 		
 		p1 = p1->next;

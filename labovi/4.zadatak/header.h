@@ -34,23 +34,23 @@ int ispis(p_clan p)
 	return 0;
 }
 
-int sortiraniUnos(p_clan novi, p_clan p)
+int sortiraniUnos(p_clan new_el, p_clan p)
 {
 	p_clan head = NULL;
 	head = p;
 
 	if (p->next == NULL) {
-		novi->next = p->next;
-		p->next = novi;
+		new_el->next = p->next;
+		p->next = new_el;
 	}
 
 	else {
-		while (p->next != NULL && p->next->exp < novi->exp) {
+		while (p->next != NULL && p->next->exp < new_el->exp) {
 			p = p->next;
 		}
 
-		novi->next = p->next;
-		p->next = novi;
+		new_el->next = p->next;
+		p->next = new_el;
 	}
 	p = head;
 

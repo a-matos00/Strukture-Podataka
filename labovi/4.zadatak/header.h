@@ -56,3 +56,19 @@ int sortiraniUnos(p_clan new_el, p_clan p)
 
 	return 0;
 }
+
+int ukloni(p_clan p)	//head element liste
+{
+	p_clan prev;
+	
+	p = p->next;
+
+	while (p != NULL) {
+		prev = p;
+		p = p->next;
+
+		free(prev);	
+	}
+
+	return 0;
+}

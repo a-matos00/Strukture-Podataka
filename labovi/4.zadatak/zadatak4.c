@@ -1,7 +1,7 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
-#include "header.h"	//struktura, ispis, sortiranje
+#include "header.h"	//struktura, ispis, sortiranje, ukloni listu
 
 int citajIzDat(FILE*, p_clan, p_clan);
 int ispis(p_clan);	//ispis liste polinoma
@@ -11,6 +11,7 @@ int sortiraniUnos(p_clan);	//sortirani unos u listu
 int zbrojiPol(p_clan, p_clan, p_clan);
 int mnoziPol(p_clan, p_clan, p_clan);
 int zbrIsteExp(p_clan);	//zbraja sve clanove polinoma sa istim eksponentom
+int ukloni(p_clan);	//funkcija uklanja listu iz memorije
 
 int main()
 {
@@ -46,6 +47,11 @@ int main()
 	zbrIsteExp(&rez_HEAD);
 	printf("Ispis konacnog rezultata: ");
 	ispis(rez_HEAD.next);
+
+	//oslobadanje memorije
+	ukloni(&p1_HEAD);
+	ukloni(&p2_HEAD);
+	ukloni(&rez_HEAD);
 
 	return 0;
 }

@@ -10,6 +10,7 @@ typedef struct clan {
 }_clan;
 
 int unosPocetak(int, p_clan);
+int unosKraj(int, p_clan);
 int ispis(p_clan);
 
 int main()
@@ -17,9 +18,9 @@ int main()
 	_clan head;
 	head.next = &head;
 
-	unosPocetak(5, &head);
-	unosPocetak(3, &head);
-	unosPocetak(7, &head);
+	unosKraj(5, &head);
+	unosKraj(3, &head);
+	unosKraj(7, &head);
 	ispis(&head);
 
 	return 0;
@@ -43,6 +44,25 @@ int ispis(p_clan p)	//arg je head element
 	}
 
 	return 0;
+}
+
+unosKraj(int br, p_clan p)
+{
+	p_clan head = p;
+
+	p_clan novi = (p_clan)malloc(sizeof(_clan));
+
+	novi->broj = br;
+
+	while (p->next != head)
+	{
+		p = p->next;
+	}
+
+	novi->next = head;
+	p->next = novi;
+
+
 }
 
 int unosPocetak(int br, p_clan p)

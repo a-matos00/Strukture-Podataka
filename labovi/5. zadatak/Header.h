@@ -65,7 +65,7 @@ int generirajRand() {
 	int x;  // "x" generirani nasumicni broj koji vracamo
 	int i = 0;
 
-	x = rand() % (10 - 1 + 1) + 1;   // "(b - a + 1) + a" za interval od <a,b>
+	x = rand() % (15 - 1 + 1) + 1;   // "(b - a + 1) + a" za interval od <a,b>
 
 	return x;
 

@@ -94,7 +94,31 @@ int unija(p_el p1, p_el p2, p_el rezU)
 			p1 = p1->next;
 			p2 = p2->next;
 		}
+	}
 
+	if (p1 == NULL)
+	{
+		
+
+		while (p2 != NULL) {
+			p_el novi = (p_el)malloc(sizeof(_el));
+			novi->broj = p1->broj;
+			unosKraj(rezU, novi);
+
+			p2 = p2->next;
+		}
+	}
+
+	if (p2 == NULL)
+	{
+
+		while (p1 != NULL) {
+			p_el novi = (p_el)malloc(sizeof(_el));
+			novi->broj = p1->broj;
+			unosKraj(rezU, novi);
+
+			p1 = p1->next;
+		}
 	}
 	return 0;
 }
@@ -131,11 +155,11 @@ int presjek(p_el p1, p_el p2, p_el rezP)
 	return 0;
 }
 
-int ispuniListuRand(p_el p)
+int ispuniListuRand(p_el p)	//ispunjava listu velicine N nasumicnim brojevima
 {
 	int i = 0;
 	int j = 0;
-	int x;
+	int randBroj;
 
 	int* niz = (int*)malloc(sizeof(int));	//sluzi za provjeru duplikata
 	int vel_niza = 1;
@@ -148,11 +172,11 @@ int ispuniListuRand(p_el p)
 
 		p_el novi = alocNoviEl();	//alocira se prostor za novi element liste
 
-		x = generirajRand();	//generiran je nasumicni broj
+		randBroj = generirajRand();	//generiran je nasumicni broj
 
 		if (vel_niza == 1)
 		{
-			niz[0] = x;
+			niz[0] = randBroj;
 			vel_niza += 1;
 
 		}
@@ -161,9 +185,9 @@ int ispuniListuRand(p_el p)
 		{
 			for (j = 0; j < vel_niza; j++)
 			{
-				if (niz[j] == x)
+				if (niz[j] == randBroj)
 				{
-					x = generirajRand();
+					randBroj = generirajRand();
 					j = -1;
 				}
 			}
@@ -171,11 +195,11 @@ int ispuniListuRand(p_el p)
 			vel_niza += 1;
 			niz = (int*)realloc(niz, vel_niza * sizeof(int));
 
-			niz[i] = x;
+			niz[i] = randBroj;
 
 		}
 
-		novi->broj = x;
+		novi->broj = randBroj;
 		sortiraniUnos(head, novi);	
 	}
 

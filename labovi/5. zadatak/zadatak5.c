@@ -99,10 +99,9 @@ int unija(p_el p1, p_el p2, p_el rezU)
 	if (p1 == NULL)
 	{
 		
-
 		while (p2 != NULL) {
 			p_el novi = (p_el)malloc(sizeof(_el));
-			novi->broj = p1->broj;
+			novi->broj = p2->broj;
 			unosKraj(rezU, novi);
 
 			p2 = p2->next;

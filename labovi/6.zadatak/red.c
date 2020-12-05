@@ -30,23 +30,30 @@ int main()
 	ispis(&head);
 
 	pop(&head);
-
-	printf("Zadnji element je %d\n", head.last->broj);
-
+	
 	ispis(&head);
 	
-	system("pause");
+	
 	return 0;
 }
 
 int pop(p_el head)
 {
 	p_el i = head;
+	p_el prev;
 
-	while( i->next != head->last){
-
+	if (head->next == NULL) {
+		puts("Red je prazan!");
+		return -1;
 	}
 
+	while( i != head->last){
+		prev = i;
+		i = i->next;
+	}
+
+	prev->next = NULL;
+	
 	return 0;
 }
 
@@ -102,6 +109,11 @@ int randBr()
 
 int ispis(p_el p)	//argument je head element
 {
+	if (p->next == NULL) {
+		puts("Prazna lista!");
+		return -1;
+	}
+
 	p = p->next;
 
 	while(p!= NULL){

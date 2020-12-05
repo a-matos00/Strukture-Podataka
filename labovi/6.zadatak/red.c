@@ -53,6 +53,7 @@ int pop(p_el head)
 	}
 
 	prev->next = NULL;
+	free(i);
 	
 	return 0;
 }

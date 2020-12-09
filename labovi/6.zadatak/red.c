@@ -30,6 +30,10 @@ int main()
 	ispis(&head);
 
 	pop(&head);
+
+	push(&head);
+	push(&head);
+	push(&head);
 	
 	ispis(&head);
 	
@@ -51,7 +55,7 @@ int pop(p_el head)
 		prev = i;
 		i = i->next;
 	}
-
+	printf("Uklonjen %d\n", i->broj);
 	prev->next = NULL;
 	free(i);
 	
@@ -79,6 +83,7 @@ int push(p_el p)	//argument je head element
 	}
 
 	novi->broj = randBr();
+	printf("Dodan %d\n",novi->broj);
 
 	if( p->next == NULL){	//ako je lista prazna
 		p->last = novi;
@@ -117,6 +122,7 @@ int ispis(p_el p)	//argument je head element
 
 	p = p->next;
 
+	printf("Ispis reda: ");
 	while(p!= NULL){
 		printf("%d ", p->broj);
 		p = p->next;

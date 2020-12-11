@@ -3,18 +3,20 @@
 
 typedef struct el* p_el;
 
-typedef struct el
-{
+typedef struct el{
 	int broj;
 	p_el next;
 }_el;
 
 int bufferSize(FILE* fp);
 char* createBuffer(FILE*);
+int izrRezPostfix(p_el, char*);
+p_el newElement(int);
 
 int main()
 {
 	FILE* fp;
+	_el HEAD_stog;
 
 	char* postfix_izraz;
 
@@ -27,9 +29,41 @@ int main()
 
 	postfix_izraz = createBuffer(fp);
 	
-	printf("%s", postfix_izraz); 
+	izrRezPostfix(&HEAD_stog, postfix_izraz);
 
 	system("pause");
+
+	return 0;
+}
+
+int izrRezPostfix(p_el p, char* str)
+{
+	int ss_return_val;
+	int n;
+
+	ss_return_val = sscanf(str, "%d", , &n);
+
+	return 0;
+}
+
+p_el newElement(int arg_br)
+{
+	p_el novi_el = (p_el)malloc(sizeof(_el));
+	novi_el->broj = arg_br;
+
+	return novi_el;
+}
+
+int push(p_el p, p_el novi)	//argument je head element
+{
+
+	if( p == NULL){
+		puts("Neispravan argument, null pokazivac");
+		return -1;
+	}
+
+	novi->next = p->next;
+	p->next = novi;
 
 	return 0;
 }

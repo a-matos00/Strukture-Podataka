@@ -40,8 +40,9 @@ int izrRezPostfix(p_el p, char* str)
 {
 	int ss_return_val;
 	int n;
+	char znak;
 
-	ss_return_val = sscanf(str, "%d", , &n);
+	ss_return_val = sscanf(str, "%d", &znak , &n);
 
 	return 0;
 }

@@ -6,12 +6,12 @@
 
 int bufferSize(FILE* fp);
 char* createBuffer(FILE*);
-int izrRezPostfix(p_el, char*);
-p_el newElement(int);
+float izrRezPostfix(p_el, char*);
+p_el newElement(float);
 int push(p_el, p_el);
 int ispis(p_el);
-int* operandi(p_el);
-int operacija(p_el, int*, char);
+float* operandi(p_el);
+int operacija(p_el, float*, char);
 int pop(p_clan);
 
 int main()
@@ -21,7 +21,7 @@ int main()
 	HEAD_stog.next = NULL;
 	char* postfix_izraz;
 
-	int rezultat = 0;
+	float rezultat = 0;
 
 	fp = fopen("postfix.txt", "r");
 
@@ -34,16 +34,16 @@ int main()
 	
 	rezultat = izrRezPostfix(&HEAD_stog, postfix_izraz);	//funkcija racuna rezultat te ispisuje sve korake
 
-	printf("Rezultat postfix izraza je %d\n", rezultat);
+	printf("Rezultat postfix izraza je %.2f\n", rezultat);
 
 	system("pause");
 
 	return 0;
 }
 
-int* operandi(p_el p) {	//funkcija stvara niz u kojem se nalaze operandi funkcije
+float* operandi(p_el p) {	//funkcija stvara niz u kojem se nalaze operandi funkcije
 
-	int *operandi = 0;
+	float *operandi = 0;
 	p_el novi = NULL;
 
 	if (p == NULL) {
@@ -56,7 +56,7 @@ int* operandi(p_el p) {	//funkcija stvara niz u kojem se nalaze operandi funkcij
 		return NULL;
 	}
 	
-	operandi = (int*)malloc(sizeof(int) * 2);
+	operandi = (float*)malloc(sizeof(float) * 2);
 
 	*(operandi + 0) = p->next->broj;
 	*(operandi + 1) = p->next->next->broj;
@@ -67,9 +67,9 @@ int* operandi(p_el p) {	//funkcija stvara niz u kojem se nalaze operandi funkcij
 
 }
 
-int operacija(p_el head, int* operandi, char operator)
+int operacija(p_el head, float* operandi, char operator)
 {
-	int a = 0, b = 0, rez = 0;
+	float a = 0, b = 0, rez = 0;
 
 	b = *(operandi + 0);
 	a = *(operandi + 1);
@@ -92,16 +92,16 @@ int operacija(p_el head, int* operandi, char operator)
 	
 }
 
-int izrRezPostfix(p_el HEAD_stog, char* str)
+float izrRezPostfix(p_el HEAD_stog, char* str)
 {
 	int r;
 	int read_offset = 0;
 	char operator;
-	int znak = 0;
-	int rezultat = 0;
+	float znak = 0;
+	float rezultat = 0;
 
 	while (str != EOF) {
-		r = sscanf(str, "%d%n", &znak, &read_offset);
+		r = sscanf(str, "%f%n", &znak, &read_offset);
 		//printf("READ OFFSET == %d\n", read_offset);
 		//printf("RETURN VALUE === %d\n", r);
 		//printf("%s\n", str);
@@ -113,7 +113,7 @@ int izrRezPostfix(p_el HEAD_stog, char* str)
 		}
 
 		if (r == 1) {
-			printf("Ucitan je broj %d\n", znak);
+			printf("Ucitan je broj %.2f\n", znak);
 		
 			push(HEAD_stog, newElement(znak));
 			

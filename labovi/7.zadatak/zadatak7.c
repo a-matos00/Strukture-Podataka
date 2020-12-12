@@ -14,7 +14,7 @@ int push(p_el, p_el);
 int ispis(p_el);
 int* operandi(p_el);
 int operacija(p_el, char);
-int pop();
+int pop(p_clan);
 
 
 int main()
@@ -96,13 +96,12 @@ int izrRezPostfix(p_el HEAD_stog, char* str)
 	int rezultat = 0;
 
 	while (str != EOF) {
-
 		r = sscanf(str, "%d%n", &znak, &read_offset);
 
-		/* printf("READ OFFSET == %d\n", read_offset);
-		printf("RETURN VALUE === %d\n", r);
+		printf("READ OFFSET == %d\n", read_offset);
+		//printf("RETURN VALUE === %d\n", r);
 		printf("%s\n", str);
-		*/	//ZA DEBUG
+			//ZA DEBUG
 
 		if (r == EOF) {
 			//puts("Kraj datoteke");	//debug
@@ -114,18 +113,21 @@ int izrRezPostfix(p_el HEAD_stog, char* str)
 		
 			push(HEAD_stog, newElement(znak));
 			
-			ispisStoga(HEAD_stog);
+			//ispisStoga(HEAD_stog);
+			str += read_offset;
 		}
 
 		if (r == 0) {
-			operator = *(str + 1);
+			str = (str + 1);
+			operator = *(str );
+			
 			printf("Ucitan je znak %c\n", operator);
 
 			rezultat = operacija(operandi(HEAD_stog), operator);
-
+			str += read_offset;
 		}
 
-		str += read_offset;	//pomice se pokazivac u stringu
+		//pomice se pokazivac u stringu
 	}
 
 	return rezultat;

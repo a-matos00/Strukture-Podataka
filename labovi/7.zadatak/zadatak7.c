@@ -1,26 +1,29 @@
 #include<stdio.h>
 #include<stdlib.h>
 
-typedef struct el* p_el;
+#include "stog.h"
 
-typedef struct el{
-	int broj;
-	p_el next;
-}_el;
+
 
 int bufferSize(FILE* fp);
 char* createBuffer(FILE*);
 int izrRezPostfix(p_el, char*);
 p_el newElement(int);
+int push(p_el, p_el);
+int ispis(p_el);
+int operacija(char);
+
 
 int main()
 {
 	FILE* fp;
 	_el HEAD_stog;
+	HEAD_stog.next = NULL;
+	int rezultat = 0;
 
 	char* postfix_izraz;
 
-	fp = fopen("datoteka.txt", "r");
+	fp = fopen("postfix.txt", "r");
 
 	if( fp == NULL){
 		puts("Greska u otvaranju datoteke");
@@ -29,20 +32,68 @@ int main()
 
 	postfix_izraz = createBuffer(fp);
 	
-	izrRezPostfix(&HEAD_stog, postfix_izraz);
+	rezultat = izrRezPostfix(&HEAD_stog, postfix_izraz);
 
+	printf("Rezultat postfix izraza je %d", rezultat);
 	system("pause");
 
 	return 0;
 }
 
-int izrRezPostfix(p_el p, char* str)
+int izrRezPostfix(p_el HEAD_stog, char* str)
 {
-	int ss_return_val;
-	int n;
-	char znak;
+	int r;
+	int read_offset = 0;
+	char operator;
+	int znak;
+	int rezultat = 0;
 
-	ss_return_val = sscanf(str, "%d", &znak , &n);
+	while (str != EOF) {
+
+		r = sscanf(str, "%d%n", &znak, &read_offset);
+
+		/* printf("READ OFFSET == %d\n", read_offset);
+		printf("RETURN VALUE === %d\n", r);
+		printf("%s\n", str);
+		*/	//ZA DEBUG
+
+		if (r == EOF) {
+			//puts("Kraj datoteke");	//debug
+			return -1;
+		}
+
+		if (r == 1) {
+			printf("Ucitan je broj %d\n", znak);
+		
+			push(HEAD_stog, newElement(znak));
+			
+			ispisStoga(HEAD_stog);
+		}
+
+		if (r == 0) {
+			operator = *(str + 1);
+			printf("Ucitan je znak %c\n", operator);
+
+			//rezultat = operacija(operator);
+
+		}
+
+		str += read_offset;	//pomice se pokazivac u stringu
+	}
+
+	return rezultat;
+}
+
+
+int push(p_el head, p_el novi)
+{
+	if (head == NULL || novi == NULL) {
+		puts("Neispravni argumenti!");
+		return -1;
+	}
+
+	novi->next = head->next;  
+    head->next = novi; 
 
 	return 0;
 }
@@ -55,19 +106,6 @@ p_el newElement(int arg_br)
 	return novi_el;
 }
 
-int push(p_el p, p_el novi)	//argument je head element
-{
-
-	if( p == NULL){
-		puts("Neispravan argument, null pokazivac");
-		return -1;
-	}
-
-	novi->next = p->next;
-	p->next = novi;
-
-	return 0;
-}
 
 char* createBuffer(FILE* fp)
 {
@@ -81,15 +119,15 @@ char* createBuffer(FILE* fp)
 	return buffer;
 }
 
-int bufferSize(FILE* fp) {	//racuna se velicina buffera
+int bufferSize(FILE* fp) {	
 	int buffer_size = 0;
 	
-	fseek(fp, 0, SEEK_END);	//stavljam file pointer na kraj
-	buffer_size = ftell(fp);	// funkcija vraca kolicinu bajtova od pocetka do trenutne pozicije
+	fseek(fp, 0, SEEK_END);	
+	buffer_size = ftell(fp);	
 
 	//printf("Velicina buffera je %d znakova\n", buffer_size);	za debuggiranje
 
-	rewind(fp);	//pokazivac datoteke se vraca na pocetak
+	rewind(fp);	
 
 	return buffer_size;
 }

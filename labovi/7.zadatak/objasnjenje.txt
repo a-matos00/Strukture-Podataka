@@ -1,0 +1,16 @@
+1. Program iz datoteke nabavlja postfix izraz
+2. Stvara se string(buffer) koji sadrzi sadrzaj datoteke
+3. Prvo se izracuna velicina buffera
+4. Pri alokaciji memorije za buffer treba dodati par znakova viska kako
+bi se sprjecile neke moguce greske pri radu sa stringom
+5. Funkcijom fread se sadrzaj datoteke upisuje u buffer
+*(Iza zadnjeg clana postfix izraza se dodaje razmak takoder iz razloga da bi se otklonilo neke moguce greske)
+6. Pomocu sscanf funkcije se iz stringa izvlace brojevi i znakovi
+7. sscanf vraca 1 ako je ucitan broj, a 0 ako je ucitan operator(+, -, /, *)
+8. Vraca -1 ako je EOF
+9. Pri nailasku na operator poziva se funkcija operacija koja za argument prima povratnu vrijednost
+funkcije operandi() i operator.
+10. Funkcija operandi vraca niz brojeva, u tom niz su dva broja sa vrha stoga
+11. Skida se element sa vrha stoga dok u drugi upisuje rezultat matematicke operacije
+12. Funkcija izrRezPostfix() vraca vrijednost jedinog elementa koji je ostao na stogu koji je
+spremljen u varijablu rezultat

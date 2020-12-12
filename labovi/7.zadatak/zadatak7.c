@@ -4,8 +4,6 @@
 #include "stog.h"
 #include "buffer.h"
 
-
-
 int bufferSize(FILE* fp);
 char* createBuffer(FILE*);
 int izrRezPostfix(p_el, char*);
@@ -13,7 +11,7 @@ p_el newElement(int);
 int push(p_el, p_el);
 int ispis(p_el);
 int* operandi(p_el);
-int operacija(p_el, char);
+int operacija(p_el, int*, char);
 int pop(p_clan);
 
 
@@ -33,19 +31,19 @@ int main()
 		return -1;
 	}
 
-	postfix_izraz = createBuffer(fp);
+	postfix_izraz = createBuffer(fp);	//sadrzaj datoteke prebacujem u string
 	
-	rezultat = izrRezPostfix(&HEAD_stog, postfix_izraz);
+	izrRezPostfix(&HEAD_stog, postfix_izraz);	//funkcija racuna rezultat te ispisuje sve korake
 
-	printf("Rezultat postfix izraza je %d", rezultat);
 	system("pause");
 
 	return 0;
 }
 
-int* operandi(p_el p) {
+int* operandi(p_el p) {	//funkcija stvara niz u kojem se nalaze operandi funkcije
 
 	int* operandi = 0;
+	p_el novi;
 
 	if (p == NULL) {
 		puts("NEISPRAVAN ARGUMENT(null pointer)!");
@@ -62,14 +60,15 @@ int* operandi(p_el p) {
 	*(operandi + 0) = p->next->broj;
 	*(operandi + 1) = p->next->next->broj;
 
-	
+	pop(p);	//skidam jedan element sa stoga
+
 	return operandi;
 
 }
 
-int operacija(int* operandi, char operator)
+int operacija(p_el head, int* operandi, char operator)
 {
-	int a = 0, b = 0;
+	int a = 0, b = 0, rez = 0;
 
 	b = *(operandi + 0);
 	a = *(operandi + 1);
@@ -79,12 +78,13 @@ int operacija(int* operandi, char operator)
 		return -1;	//UPITNO!!!!
 	}
 
-	switch (operator) {
+	switch (operator) {	//rezultat operacije se upise u element koji je na vrhu stoga
 
-	case '+': return a + b; break;
-	case '*': return a * b; break;
+	case '+': head->next->broj = a + b; break;
+	case '*': head->next->broj = a * b; break;
 
 	}
+	return 0;
 }
 
 int izrRezPostfix(p_el HEAD_stog, char* str)
@@ -99,12 +99,13 @@ int izrRezPostfix(p_el HEAD_stog, char* str)
 		r = sscanf(str, "%d%n", &znak, &read_offset);
 
 		printf("READ OFFSET == %d\n", read_offset);
-		//printf("RETURN VALUE === %d\n", r);
+		printf("RETURN VALUE === %d\n", r);
 		printf("%s\n", str);
 			//ZA DEBUG
 
 		if (r == EOF) {
 			//puts("Kraj datoteke");	//debug
+			
 			return -1;
 		}
 
@@ -113,20 +114,22 @@ int izrRezPostfix(p_el HEAD_stog, char* str)
 		
 			push(HEAD_stog, newElement(znak));
 			
-			//ispisStoga(HEAD_stog);
+			
 			str += read_offset;
 		}
 
 		if (r == 0) {
-			str = (str + 1);
-			operator = *(str );
-			
+			operator = *(str + 1);	//+1 radi razmaka
+			str += read_offset;
+
 			printf("Ucitan je znak %c\n", operator);
 
-			rezultat = operacija(operandi(HEAD_stog), operator);
-			str += read_offset;
+			operacija(HEAD_stog, operandi(HEAD_stog), operator);
+			
 		}
 
+		
+		ispisStoga(HEAD_stog);
 		//pomice se pokazivac u stringu
 	}
 

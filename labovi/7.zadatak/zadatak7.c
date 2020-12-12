@@ -2,6 +2,7 @@
 #include<stdlib.h>
 
 #include "stog.h"
+#include "buffer.h"
 
 
 
@@ -11,7 +12,9 @@ int izrRezPostfix(p_el, char*);
 p_el newElement(int);
 int push(p_el, p_el);
 int ispis(p_el);
-int operacija(char);
+int* operandi(p_el);
+int operacija(p_el, char);
+int pop();
 
 
 int main()
@@ -38,6 +41,50 @@ int main()
 	system("pause");
 
 	return 0;
+}
+
+int* operandi(p_el p) {
+
+	int* operandi = 0;
+
+	if (p == NULL) {
+		puts("NEISPRAVAN ARGUMENT(null pointer)!");
+		return NULL;
+	}
+
+	else if (p->next == NULL || p->next->next == NULL) {
+		puts("Nedovoljan broj argumenata!");
+		return NULL;
+	}
+	
+	operandi = (int*)malloc(sizeof(int) * 2);
+
+	*(operandi + 0) = p->next->broj;
+	*(operandi + 1) = p->next->next->broj;
+
+	
+	return operandi;
+
+}
+
+int operacija(int* operandi, char operator)
+{
+	int a = 0, b = 0;
+
+	b = *(operandi + 0);
+	a = *(operandi + 1);
+
+	if (operandi == NULL) {
+		puts("Greska pri pronalazenju operanada");
+		return -1;	//UPITNO!!!!
+	}
+
+	switch (operator) {
+
+	case '+': return a + b; break;
+	case '*': return a * b; break;
+
+	}
 }
 
 int izrRezPostfix(p_el HEAD_stog, char* str)
@@ -74,7 +121,7 @@ int izrRezPostfix(p_el HEAD_stog, char* str)
 			operator = *(str + 1);
 			printf("Ucitan je znak %c\n", operator);
 
-			//rezultat = operacija(operator);
+			rezultat = operacija(operandi(HEAD_stog), operator);
 
 		}
 
@@ -85,49 +132,8 @@ int izrRezPostfix(p_el HEAD_stog, char* str)
 }
 
 
-int push(p_el head, p_el novi)
-{
-	if (head == NULL || novi == NULL) {
-		puts("Neispravni argumenti!");
-		return -1;
-	}
-
-	novi->next = head->next;  
-    head->next = novi; 
-
-	return 0;
-}
-
-p_el newElement(int arg_br)
-{
-	p_el novi_el = (p_el)malloc(sizeof(_el));
-	novi_el->broj = arg_br;
-
-	return novi_el;
-}
 
 
-char* createBuffer(FILE* fp)
-{
-	char* buffer;
 
-	buffer = (char*)calloc(bufferSize(fp) + 1, sizeof(char));	//ALOKACIJA BUFFERA
-	fread(buffer, bufferSize(fp), 1, fp);	//sadrzaj datoteke se upisuje u buffer
 
-	//printf("Ispis buffera datoteke %s\n", buffer);	za debug
 
-	return buffer;
-}
-
-int bufferSize(FILE* fp) {	
-	int buffer_size = 0;
-	
-	fseek(fp, 0, SEEK_END);	
-	buffer_size = ftell(fp);	
-
-	//printf("Velicina buffera je %d znakova\n", buffer_size);	za debuggiranje
-
-	rewind(fp);	
-
-	return buffer_size;
-}

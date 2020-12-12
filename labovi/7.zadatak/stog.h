@@ -28,3 +28,24 @@ int ispisStoga(p_el p)
 
 	return 0;
 }
+
+int push(p_el head, p_el novi)
+{
+	if (head == NULL || novi == NULL) {
+		puts("Neispravni argumenti!");
+		return -1;
+	}
+
+	novi->next = head->next;
+	head->next = novi;
+
+	return 0;
+}
+
+p_el newElement(int arg_br)
+{
+	p_el novi_el = (p_el)malloc(sizeof(_el));
+	novi_el->broj = arg_br;
+
+	return novi_el;
+}

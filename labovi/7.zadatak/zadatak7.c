@@ -87,7 +87,9 @@ int operacija(p_el head, float* operandi, char operator)
 				break;
 
 		case '-': head->next->broj = a + b;
-				break;		
+				break;
+		case '/': head->next->broj = a / b;
+			break;
 	}
 	
 }

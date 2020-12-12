@@ -98,8 +98,8 @@ int izrRezPostfix(p_el HEAD_stog, char* str)
 	while (str != EOF) {
 		r = sscanf(str, "%d%n", &znak, &read_offset);
 
-		printf("READ OFFSET == %d\n", read_offset);
-		printf("RETURN VALUE === %d\n", r);
+		//printf("READ OFFSET == %d\n", read_offset);
+		//printf("RETURN VALUE === %d\n", r);
 		printf("%s\n", str);
 			//ZA DEBUG
 

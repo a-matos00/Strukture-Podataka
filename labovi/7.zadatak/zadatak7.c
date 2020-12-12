@@ -14,15 +14,14 @@ int* operandi(p_el);
 int operacija(p_el, int*, char);
 int pop(p_clan);
 
-
 int main()
 {
 	FILE* fp;
 	_el HEAD_stog;
 	HEAD_stog.next = NULL;
-	int rezultat = 0;
-
 	char* postfix_izraz;
+
+	int rezultat = 0;
 
 	fp = fopen("postfix.txt", "r");
 
@@ -33,7 +32,9 @@ int main()
 
 	postfix_izraz = createBuffer(fp);	//sadrzaj datoteke prebacujem u string
 	
-	izrRezPostfix(&HEAD_stog, postfix_izraz);	//funkcija racuna rezultat te ispisuje sve korake
+	rezultat = izrRezPostfix(&HEAD_stog, postfix_izraz);	//funkcija racuna rezultat te ispisuje sve korake
+
+	printf("Rezultat postfix izraza je %d\n", rezultat);
 
 	system("pause");
 
@@ -42,8 +43,8 @@ int main()
 
 int* operandi(p_el p) {	//funkcija stvara niz u kojem se nalaze operandi funkcije
 
-	int* operandi = 0;
-	p_el novi;
+	int *operandi = 0;
+	p_el novi = NULL;
 
 	if (p == NULL) {
 		puts("NEISPRAVAN ARGUMENT(null pointer)!");
@@ -60,7 +61,7 @@ int* operandi(p_el p) {	//funkcija stvara niz u kojem se nalaze operandi funkcij
 	*(operandi + 0) = p->next->broj;
 	*(operandi + 1) = p->next->next->broj;
 
-	pop(p);	//skidam jedan element sa stoga
+	pop(p);	//skida se jedan element sa stoga
 
 	return operandi;
 
@@ -79,12 +80,16 @@ int operacija(p_el head, int* operandi, char operator)
 	}
 
 	switch (operator) {	//rezultat operacije se upise u element koji je na vrhu stoga
+		case '+':head->next->broj = a + b;
+				break;
 
-	case '+': head->next->broj = a + b; break;
-	case '*': head->next->broj = a * b; break;
+		case '*':head->next->broj = a * b;
+				break;
 
+		case '-': head->next->broj = a + b;
+				break;		
 	}
-	return 0;
+	
 }
 
 int izrRezPostfix(p_el HEAD_stog, char* str)
@@ -92,28 +97,25 @@ int izrRezPostfix(p_el HEAD_stog, char* str)
 	int r;
 	int read_offset = 0;
 	char operator;
-	int znak;
+	int znak = 0;
 	int rezultat = 0;
 
 	while (str != EOF) {
 		r = sscanf(str, "%d%n", &znak, &read_offset);
-
 		//printf("READ OFFSET == %d\n", read_offset);
 		//printf("RETURN VALUE === %d\n", r);
-		printf("%s\n", str);
+		//printf("%s\n", str);
 			//ZA DEBUG
 
 		if (r == EOF) {
 			//puts("Kraj datoteke");	//debug
-			
-			return -1;
+			break;
 		}
 
 		if (r == 1) {
 			printf("Ucitan je broj %d\n", znak);
 		
 			push(HEAD_stog, newElement(znak));
-			
 			
 			str += read_offset;
 		}
@@ -128,10 +130,13 @@ int izrRezPostfix(p_el HEAD_stog, char* str)
 			
 		}
 
-		
 		ispisStoga(HEAD_stog);
 		//pomice se pokazivac u stringu
 	}
+
+	rezultat = HEAD_stog->next->broj;
+
+	pop(HEAD_stog);	//uklanja se zadnji clan sa stoga koji sadrzi ukupni rezultat
 
 	return rezultat;
 }

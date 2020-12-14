@@ -46,6 +46,7 @@ p_el newElement(int arg_br)
 {
 	p_el novi_el = (p_el)malloc(sizeof(_el));
 	novi_el->broj = arg_br;
+	novi_el->next = NULL;
 
 	return novi_el;
 }

@@ -5,8 +5,13 @@ char* createBuffer(FILE* fp)
 {
 	char* buffer;
 
-	buffer = (char*)calloc(bufferSize(fp) + 1, sizeof(char));	//ALOKACIJA BUFFERA
-	fread(buffer, bufferSize(fp), 1, fp);	//sadrzaj datoteke se upisuje u buffer
+	int buffer_size = bufferSize(fp);
+
+	buffer = (char*)calloc(buffer_size + 10, sizeof(char));	//ALOKACIJA BUFFERA(doda se par znakova viska za svaki slucaj
+	fread(buffer, buffer_size, 1, fp);	//sadrzaj datoteke se upisuje u buffer
+	*(buffer + buffer_size) = ' ';	//razmak iza zadnjeg znaka postfix izraza radi nekih sitnih pikanterija
+
+	fclose(fp);
 
 	//printf("Ispis buffera datoteke %s\n", buffer);	za debug
 

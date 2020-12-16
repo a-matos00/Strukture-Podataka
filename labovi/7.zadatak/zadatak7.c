@@ -142,10 +142,3 @@ float izrRezPostfix(p_el HEAD_stog, char* str)
 
 	return rezultat;
 }
-
-
-
-
-
-
-

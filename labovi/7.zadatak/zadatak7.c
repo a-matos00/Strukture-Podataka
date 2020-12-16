@@ -1,8 +1,10 @@
-#include<stdio.h>
+﻿#include<stdio.h>
 #include<stdlib.h>
 
 #include "stog.h"
 #include "buffer.h"
+
+#define PFIX_ERR -1
 
 int bufferSize(FILE* fp);
 char* createBuffer(FILE*);
@@ -86,10 +88,12 @@ int operacija(p_el head, float* operandi, char operator)
 		case '*':head->next->broj = a * b;
 				break;
 
-		case '-': head->next->broj = a + b;
+		case '-': head->next->broj = a - b;
 				break;
 		case '/': head->next->broj = a / b;
 			break;
+
+		default: return PFIX_ERR;
 	}
 	
 }
@@ -101,6 +105,7 @@ float izrRezPostfix(p_el HEAD_stog, char* str)
 	char operator;
 	float znak = 0;
 	float rezultat = 0;
+	int error = 0;	//ako je -1 onda je greska
 
 	while (str != EOF) {
 		r = sscanf(str, "%f%n", &znak, &read_offset);
@@ -128,7 +133,13 @@ float izrRezPostfix(p_el HEAD_stog, char* str)
 
 			printf("Ucitan je znak %c\n", operator);
 
-			operacija(HEAD_stog, operandi(HEAD_stog), operator);
+			error = 0;
+			error = operacija(HEAD_stog, operandi(HEAD_stog), operator);
+
+			if (error == -1) {
+				puts("Ucitan je nevazeci znak, POSTFIX IZRAZ NIJE ISPRAVAN!");
+				return -1;
+			}
 			
 		}
 

@@ -36,7 +36,7 @@ int addBrother(p_dir p, char* name)	//argument je parent
 	p_dir prev = NULL;
 
 	p_dir new_child = createDir(name);
-	new_child->parent = p->parent;
+	new_child->parent = parent;
 
 	p = p->child;	//P je sada prvo dijete
 	prev = p;

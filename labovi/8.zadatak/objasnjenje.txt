@@ -1,0 +1,8 @@
+1. Korisnik daje ime root direktoriju koji ce sadrzavati sve nove direktorije
+2. Pokrece se for petlja koja iz koje se izlazi naredbom "exit".
+3. Funkcija proccessCommand() je kljucna je srce programa jer cita korisnikov unos
+te na temelju njega poziva funkcije naredbi.
+4. Ta funkcija vraca direktorij u koji je trenutno otvoren.
+5. Direktorij se nece mijenjati osim u slucaju kad se upise naredba "cd".
+6. Ako se unese naredba exit funkcija processCommand ce vratiti NULL sto oznacava kraj programa
+7.

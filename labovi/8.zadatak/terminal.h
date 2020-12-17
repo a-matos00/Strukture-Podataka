@@ -98,28 +98,28 @@ p_dir changeDir(p_dir arg_p, char* arg_name)
 	p_dir p = arg_p->child;
 
 	if (*arg_name == '\0') {	//jer gets() dodaje '\0' na kraj
-		puts("ERROR: new directory name is empty");
+		puts("ERROR: directory name is empty");
 		return arg_p;
 	}
 
 	if (p == NULL) {
-		printf("Directory with name %s does not exist\n", arg_name);
+		printf("Current directory is empty\n", arg_name);
 		return arg_p;
 	}
 
-	while ( strcmp(p->name, arg_name) != 0 && p != NULL)
+	while (p != NULL && strcmp(p->name, arg_name) != 0 )
 	{
 		p = p->brother;
 	}
 
-	if (strcmp(p->name, arg_name) == 0) {
-		//puts("Directory found");	//debug
-		return p;
+	if (p == NULL) {
+		printf("Directory %s does not exist\n", arg_name);
+		return arg_p;
 	}
 
-	else {
-		printf("Directory with name %s does not exist\n", arg_name);
-		return arg_p;
+	else if(strcmp(p->name, arg_name) == 0) {
+		//puts("Directory found");	//debug
+		return p;
 	}
 }
 

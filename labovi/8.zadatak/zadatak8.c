@@ -1,24 +1,9 @@
 #include<stdio.h>
 #include<stdlib.h>
 
-#include "tree.h"
-#include "terminal.h"
+#include "tree.h"	//sadrzi funkcije vezane za upravljanje stablom
+#include "terminal.h"	//sadrzi funkcije vezane za naredbe terminala
 
-int clearData(p_dir p)
-{
-	p_dir prev = p;
-
-	if (p->child == NULL)
-		free(p);
-	else
-		p = p->child;
-
-	while (p->child != NULL)
-	{
-		p = p->brother;
-	}
-
-}
 
 int main()
 {
@@ -27,23 +12,24 @@ int main()
 	p_dir curr_dir = NULL;
 	_dir root;
 
-	strcpy(root.name, "root");
 	root.child = NULL;
 	root.brother = NULL;
 	root.parent = NULL;
 
 	curr_dir = &root;
 
-	puts("Enter username: ");
+	puts("Enter username(root directory name): ");
 	gets(username);
+
+	strcpy(root.name, username);
 	
 	while (1)
 	{
-		printf("%s/%s/ ",username, curr_dir->name);
-		gets(&input);
-		curr_dir = processCommand(&input, curr_dir);
+		printf("%s/", curr_dir->name);	//ispis trenutno otvorenog direktorija
+		gets(&input);	//korisnikov unos
+		curr_dir = processCommand(&input, curr_dir);	//funkcija vraca direktorij koji je otvoren
 
-		if (curr_dir == NULL)
+		if (curr_dir == NULL)	//ako funkcija vrati NULL tada se izlazi iz programa
 			break;
 	}
 

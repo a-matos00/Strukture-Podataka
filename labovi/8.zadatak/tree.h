@@ -1,49 +1,49 @@
 #pragma once
-
-#define NAME_SIZE 256
 typedef struct dir* p_dir;
-
+#define STR_SIZE 256
 typedef struct dir {
-	char name[NAME_SIZE];
+	char name[STR_SIZE];
 	p_dir child;
 	p_dir brother;
+	p_dir parent;
 }_dir;
 
-p_dir createDir();
-int addChild(p_dir);
-int addBrother(p_dir);
-int showContent(p_dir p);
+p_dir createDir(char*);
+int addChild(p_dir, char*);
+int addBrother(p_dir, char*);
+int showContent(p_dir);
 
-int addChild(p_dir p)
+
+int addChild(p_dir p, char* name)
 {
 
 	if (p->child == NULL) {	//ako vec postoji dijete
-		p->child = createDir();
+		p->child = createDir(name);
+		p->child->parent = p;
 	}
 
 	else {
-		addBrother(p->child);
+		addBrother(p->child, name);
 	}
 
 	return 0;
 }
 
-int addBrother(p_dir p)
+int addBrother(p_dir p, char* name)	//first arg is the first child of parent
 {
 	while (p->brother != NULL)
 	{
 		p = p->brother;
 	}
 
-	p->brother = createDir();
+	p->brother = createDir(name);
+	p->brother->parent = p->parent;
 
 	return 0;
 }
 
-p_dir createDir()
+p_dir createDir(char* arg_name)
 {
-	char name[NAME_SIZE];
-
 	p_dir new_dir = (p_dir)malloc(sizeof(_dir));
 
 	if (new_dir == NULL) {
@@ -51,23 +51,18 @@ p_dir createDir()
 		return NULL;
 	}
 
-	puts("Unesi ime direktorija: ");
-	scanf("%s", &name);
-
-	strcpy(new_dir, name);
-
-	strcpy(new_dir->name, name);
+	strcpy(new_dir->name, arg_name);
 	new_dir->child = NULL;
 	new_dir->brother = NULL;
 
-	//printf("Ime novog direktorija %s\n", new_dir->name); //debug
+	printf("Created new directory %s\n", arg_name);
 
 	return new_dir;
 }
 
 int showContent(p_dir p)
 {
-	printf("Ispis sadrzaja direktorija: ");
+	p = p->child;
 
 	while (p != NULL)
 	{

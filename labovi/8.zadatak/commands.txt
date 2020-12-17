@@ -1,0 +1,5 @@
+cd <name>- move to <name> directory
+cd.. - move to parent directory
+ls - show directory content
+mkdir <name> - create new directory
+exit - exit program

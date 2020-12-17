@@ -6,6 +6,7 @@ typedef struct dir {
 	p_dir child;
 	p_dir brother;
 	p_dir parent;
+
 }_dir;
 
 p_dir createDir(char*);
@@ -17,28 +18,46 @@ int showContent(p_dir);
 int addChild(p_dir p, char* name)
 {
 
-	if (p->child == NULL) {	//ako vec postoji dijete
+	if (p->child == NULL) {		//ako nema dijete
 		p->child = createDir(name);
 		p->child->parent = p;
 	}
 
 	else {
-		addBrother(p->child, name);
+		addBrother(p, name);
 	}
 
 	return 0;
 }
 
-int addBrother(p_dir p, char* name)	//first arg is the first child of parent
+int addBrother(p_dir p, char* name)	//argument je parent
 {
-	while (p->brother != NULL)
+	p_dir parent = p;
+	p_dir prev = NULL;
+
+	p_dir new_child = createDir(name);
+	new_child->parent = p->parent;
+
+	p = p->child;	//P je sada prvo dijete
+	prev = p;
+
+	if ( strcmp(name, p->name) < 0 ) //ako je manji od prvog djeteta
 	{
-		p = p->brother;
+		parent->child = new_child;
+		new_child->brother = p;
 	}
 
-	p->brother = createDir(name);
-	p->brother->parent = p->parent;
+	else {
 
+		while (p->brother != NULL && strcmp(name, p->name) > 0)
+		{
+			prev = p;
+			p = p->brother;
+		}
+
+		new_child->brother = prev->brother;
+		prev->brother = new_child;
+	}
 	return 0;
 }
 

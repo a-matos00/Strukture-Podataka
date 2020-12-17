@@ -4,6 +4,22 @@
 #include "tree.h"
 #include "terminal.h"
 
+int clearData(p_dir p)
+{
+	p_dir prev = p;
+
+	if (p->child == NULL)
+		free(p);
+	else
+		p = p->child;
+
+	while (p->child != NULL)
+	{
+		p = p->brother;
+	}
+
+}
+
 int main()
 {
 	char input[STR_SIZE];

@@ -26,6 +26,9 @@ p_dir processCommand(char* input, p_dir arg_dir)
 	printf("%s\n", name);
 	*/
 
+	if(*command == '\0')	//ako se stisne enter
+		return arg_dir;
+
 	if (r == -1) {
 		puts("FATAL ERROR");
 		return arg_dir;

@@ -13,7 +13,48 @@ p_dir createDir(char*);
 int addChild(p_dir, char*);
 int addBrother(p_dir, char*);
 int showContent(p_dir);
+int deleteTree(p_dir);
 
+int deleteTree(p_dir p)
+{
+	p_dir root = p;
+
+	p_dir parent = root;
+
+	//p = p->child;
+
+	if (root->child == NULL) {	//ako root direktorij nema djece(sigurno nema brace)
+		/*printf("Izbrisan %s\n", root->name);	//koristi samo ako je root dinamicki alociran
+		free(root);*/
+		return 0;
+	}
+
+	while ( root->child != NULL )	//sve dok root ima dijete
+	{
+		p = root->child;
+		parent = root;
+		
+		while (p->child != NULL)	//spustamo se do elementa koji nema djece
+		{
+			parent = p;
+			p = p->child;
+
+		}
+		while (p->brother != NULL)
+		{
+			parent->child = p->brother;
+			printf("Izbrisan %s\n", p->name);
+			free(p);
+			p = parent->child;
+		}
+		parent->child = NULL;	//odspajamo najnizu razinu od predzadnje
+		printf("Izbrisan %s\n", p->name);
+		free(p);	//osta je jedan element u najnizoj razini te ga brisemo
+	}
+	/*printf("Izbrisan %s\n", root->name);	//koristi samo ako je root dinamicki alociran
+	free(root);	*/
+	return 0;
+}
 
 int addChild(p_dir p, char* name)
 {

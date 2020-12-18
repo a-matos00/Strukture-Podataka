@@ -33,5 +33,8 @@ int main()
 			break;
 	}
 
+	
+	deleteTree(&root);	//oslobada se memorija koju je zauzelo stablo
+
 	return 0;
 }

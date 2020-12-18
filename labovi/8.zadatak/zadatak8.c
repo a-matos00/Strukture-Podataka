@@ -9,7 +9,12 @@ int main()
 {
 	char input[STR_SIZE];
 	char username[STR_SIZE];
+
 	p_dir curr_dir = NULL;
+	
+	_el stog;
+	stog.next = NULL;
+
 	_dir root;
 
 	root.child = NULL;
@@ -34,7 +39,10 @@ int main()
 	}
 
 	
-	deleteTree(&root);	//oslobada se memorija koju je zauzelo stablo
+	remove(root.child);	//oslobada se memorija koju je zauzelo stablo
+	root.child = NULL;
+	showContent(&root);	//provjera
 
+	system("pause");
 	return 0;
 }

@@ -1,6 +1,18 @@
 #pragma once
-typedef struct dir* p_dir;
+
 #define STR_SIZE 256
+
+struct dir;
+struct el;
+
+typedef struct dir* p_dir;
+typedef struct el* p_el;
+
+typedef struct el{
+	char name[STR_SIZE];	//debug
+	p_el next;
+}_el;
+
 typedef struct dir {
 	char name[STR_SIZE];
 	p_dir child;
@@ -13,46 +25,18 @@ p_dir createDir(char*);
 int addChild(p_dir, char*);
 int addBrother(p_dir, char*);
 int showContent(p_dir);
-int deleteTree(p_dir);
+int remove(p_dir);
 
-int deleteTree(p_dir p)
+int remove(p_dir p)
 {
-	p_dir root = p;
-
-	p_dir parent = root;
-
-	//p = p->child;
-
-	if (root->child == NULL) {	//ako root direktorij nema djece(sigurno nema brace)
-		/*printf("Izbrisan %s\n", root->name);	//koristi samo ako je root dinamicki alociran
-		free(root);*/
+	if( p == NULL)
 		return 0;
-	}
 
-	while ( root->child != NULL )	//sve dok root ima dijete
-	{
-		p = root->child;
-		parent = root;
-		
-		while (p->child != NULL)	//spustamo se do elementa koji nema djece
-		{
-			parent = p;
-			p = p->child;
+	remove(p->brother);
+	remove(p->child);
+	printf("Uklonjen %s\n", p->name);
+	free(p);
 
-		}
-		while (p->brother != NULL)
-		{
-			parent->child = p->brother;
-			printf("Izbrisan %s\n", p->name);
-			free(p);
-			p = parent->child;
-		}
-		parent->child = NULL;	//odspajamo najnizu razinu od predzadnje
-		printf("Izbrisan %s\n", p->name);
-		free(p);	//osta je jedan element u najnizoj razini te ga brisemo
-	}
-	/*printf("Izbrisan %s\n", root->name);	//koristi samo ako je root dinamicki alociran
-	free(root);	*/
 	return 0;
 }
 
@@ -122,12 +106,23 @@ p_dir createDir(char* arg_name)
 
 int showContent(p_dir p)
 {
-	p = p->child;
+	if(p == NULL)
+	{
+		puts("MEMORY ERROR(pointer to directory has NULL value");
+		return -1;
+	}
+
+	if( p->child == NULL )
+	{
+		printf("Directory %s is empty\n", p->name);
+		return 0;
+	}
+
+	p = p->child;	//pokazivac se spusta na prvo dijete
 
 	while (p != NULL)
 	{
 		printf("%s ", p->name);
-		p = p->name;
 		p = p->brother;
 	}
 	puts("");

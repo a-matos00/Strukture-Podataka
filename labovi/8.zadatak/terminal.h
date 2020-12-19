@@ -9,15 +9,15 @@ p_dir previousDir(p_dir);
 
 p_dir processCommand(char* input, p_dir arg_dir)
 {
-	int r;
+	int r = 0;
 	char command[STR_SIZE] = { 0 };
 	char arg[STR_SIZE] = { 0 };
 
-	char* buffer = (char*)calloc(strlen(input) + 1, sizeof(char));
+	char* buffer = (char*)calloc(strlen(input) + 10, sizeof(char));	//alokacija memorije za buffer (+10 bajtova viska za svaki slucaj)
 
-	strcpy(buffer, input);
+	strcpy(buffer, input);	//korisnikov unos se upsiuje u buffer
 
-	//printf("Print buffer %s\n", buffer); //debug
+	//printf("Print buffer %s\n", buffer); //debug provjera buffera
 
 	r = sscanf(buffer, "%s %s", &command, &arg);
 
@@ -26,10 +26,10 @@ p_dir processCommand(char* input, p_dir arg_dir)
 	printf("%s\n", name);
 	*/
 
-	if(*command == '\0')	//ako se stisne enter
+	if(*command == '\0')	//ako korisnik stisne enter
 		return arg_dir;
 
-	if (r == -1) {
+	if (r == -1) {	//
 		puts("FATAL ERROR");
 		return arg_dir;
 	}

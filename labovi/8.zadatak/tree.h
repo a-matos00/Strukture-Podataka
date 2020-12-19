@@ -3,15 +3,8 @@
 #define STR_SIZE 256
 
 struct dir;
-struct el;
 
 typedef struct dir* p_dir;
-typedef struct el* p_el;
-
-typedef struct el{
-	char name[STR_SIZE];	//debug
-	p_el next;
-}_el;
 
 typedef struct dir {
 	char name[STR_SIZE];

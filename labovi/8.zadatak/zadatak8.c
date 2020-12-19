@@ -12,20 +12,15 @@ int main()
 
 	p_dir curr_dir = NULL;
 	
-	_el stog;
-	stog.next = NULL;
-
 	_dir root;
-
 	root.child = NULL;
 	root.brother = NULL;
 	root.parent = NULL;
 
-	curr_dir = &root;
+	curr_dir = &root;	//trenutno otvoreni direktorij
 
-	puts("Enter username(root directory name): ");
+	puts("Enter username(root directory name): ");	//unos naziva root direktorija
 	gets(username);
-
 	strcpy(root.name, username);
 	
 	while (1)
@@ -39,7 +34,7 @@ int main()
 	}
 
 	
-	remove(root.child);	//oslobada se memorija koju je zauzelo stablo
+	remove(root.child);	//brise se stablo, root direktorij se ne brise
 	root.child = NULL;
 	showContent(&root);	//provjera
 

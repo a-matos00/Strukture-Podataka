@@ -3,7 +3,7 @@
 #include "tree.h"
 
 p_dir processCommand(char*, p_dir);
-p_dir ExecuteCmnd(char*, char*);
+p_dir ExecuteCmnd(char*, char*,p_dir);
 p_dir changeDir(p_dir, char*);
 p_dir previousDir(p_dir);
 

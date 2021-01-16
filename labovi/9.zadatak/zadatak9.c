@@ -16,15 +16,32 @@ position insert(position current, position el);
 void printInOrder(position current);
 position find(position current, int number);
 position deleteNode(position current, int number);
+position findMax(position current);
+position findMin(position current);
 
 int main(void)
 {
 	position root = NULL;
-	position el = createNode(15);
+	int value;
+	position el = NULL;
+	
+	printf("Enter an integer(enter 0 to stop):\t");
+	scanf("%d", &value);
 
-	root = insert(root,el);
+	el = createNode(value);
+	root = insert(root, el);
+	
+	while(value != 0){
+		printf("Enter an integer(enter 0 to stop):\t");
+		scanf("%d", &value);
 
-	return EXIT_SUCCESS;
+		el = createNode(value);
+		root = insert(root, el);
+	}
+
+	printInOrder(root);	//print the binary tree
+
+	return 0;
 }
 position deleteNode(position current, int number)
 {
@@ -63,7 +80,20 @@ position findMax(position current)
 		return NULL;
 	
 	while ( current->right != NULL )
-		current = findMAX(current->right);
+		current = findMax(current->right);
+
+	return current;
+}
+
+position findMin(position current)
+{
+	if (NULL == current)
+		return NULL;
+
+	while (current->left != NULL)
+		current = findMin(current->left);
+
+	return current;
 }
 
 position find(position current, int number)
@@ -103,6 +133,8 @@ position insert(position current, position el)
 		printf("Duplicirana vrijednost");
 		free(el);
 	}
+
+	return current;
 }
 
 position createNode(int num){
@@ -118,4 +150,6 @@ position createNode(int num){
 	p->number = num;
 	p->left = NULL;
 	p->right = NULL;
+
+	return p;
 }

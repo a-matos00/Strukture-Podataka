@@ -2,14 +2,16 @@
 #include<stdlib.h>
 #include<string.h>
 
+#define STR_SIZE 10
 struct node;
 struct el;
+
 
 typedef struct node* p_node;
 typedef struct el* p_el;
 
 typedef struct node {
-	char item[3];
+	char item[STR_SIZE];
 	p_node L;
 	p_node R;
 
@@ -26,7 +28,7 @@ p_node createNode(char*);
 int push(p_el, p_node);	//head el i vrijednost novog elementa stoga
 int ispisStoga(p_el);
 p_node pop(p_el);
-void printInOrder(p_node current);
+void printInOrder(p_node, char*);
 
 int main()
 {
@@ -34,6 +36,9 @@ int main()
 	_el stack;
 	FILE* fp;
 	char* read_buffer;
+	FILE* fp_out;
+	char* infix_str;
+	int buffer_size = 0;
 
 	fp = fopen("postfix.txt", "r");
 
@@ -42,15 +47,31 @@ int main()
 		return -1;
 	}
 
-	read_buffer = (char*)calloc(bufferSize(fp) + 10, sizeof(char));
-	fread(read_buffer, bufferSize(fp), 1, fp);
-	*(read_buffer + bufferSize(fp)) = ' ';	//razmak iza zadnjeg znaka postfix izraza radi nekih sitnih pikanterija
-	fclose(fp);
+	buffer_size = bufferSize(fp);
+	read_buffer = (char*)calloc(buffer_size + 10, sizeof(char));
+	infix_str = (char*)calloc(buffer_size + 10, sizeof(char));
+	fread(read_buffer, buffer_size, 1, fp);
+	*(read_buffer + buffer_size) = ' ';	//razmak iza zadnjeg znaka jer ako je - na kraju bude greska bez ovoga
+
 	printf("Procitani buffer je %s\n", read_buffer);
 
 	root = readFromBuffer(read_buffer);
+	fclose(fp);
 
-	printInOrder(root);
+	printf("Infix izraz: ");
+	printInOrder(root, infix_str);	// console debug
+	puts("");
+
+	printf("infix_str =====> %s\n", infix_str);
+	fp_out = fopen("infix.txt", "w");
+
+	if (fp_out == NULL) {
+		puts("Greska kod otvaranja datoteke!");
+		return -1;
+	}
+
+	fwrite(infix_str, 1, buffer_size + 1, fp_out);
+	fclose(fp_out);
 
 	system("pause");
 	return 0;
@@ -62,9 +83,9 @@ p_node readFromBuffer(char* buffer)
 	int num;
 	int n = 0;
 	int offset = 0;
-	char operator[3];
+	char operator[STR_SIZE];
 	p_node tree_root = (p_node)malloc(sizeof(_node));
-	char arg[3];
+	char arg[STR_SIZE];
 	p_node new_node;
 	p_node L_child;
 	p_node R_child;
@@ -98,7 +119,7 @@ p_node readFromBuffer(char* buffer)
 			R_child = pop(&stack);
 			L_child = pop(&stack);
 			addChildren(L_child, R_child, tree_root);
-			printf("DJECA %s %s\n", tree_root->R->item, tree_root->L->item);
+			printf("DJECA cvora %s su %s %s\n", tree_root->item, tree_root->R->item, tree_root->L->item);
 
 			push(&stack, new_node);
 		}
@@ -111,14 +132,16 @@ p_node readFromBuffer(char* buffer)
 	return tree_root;
 }
 
-void printInOrder(p_node current)
+void printInOrder(p_node current, char* str)
 {
 	if (current == NULL)
 		return;
 
-	printInOrder(current->L);
+	printInOrder(current->L, str);
 	printf("%s ", current->item);
-	printInOrder(current->R);
+	strcat(str, " ");
+	strcat(str, current->item);
+	printInOrder(current->R, str);
 }
 
 int addChildren(p_node arg_left, p_node arg_right, p_node root)

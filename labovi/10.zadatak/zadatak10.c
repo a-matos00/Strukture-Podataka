@@ -29,6 +29,7 @@ int push(p_el, p_node);	//head el i vrijednost novog elementa stoga
 int ispisStoga(p_el);
 p_node pop(p_el);
 void printInOrder(p_node, char*);
+int addChildren( p_node L_child, p_node R_child, p_node tree_root);
 
 int main()
 {
@@ -93,7 +94,7 @@ p_node readFromBuffer(char* buffer)
 	_el stack;
 	stack.next = NULL;
 
-	while (buffer != EOF) {
+	while (*buffer != EOF) {
 
 		printf("ostatak buffera ==> %s\n", buffer);
 		r = sscanf(buffer, "%d%n", &num, &n);

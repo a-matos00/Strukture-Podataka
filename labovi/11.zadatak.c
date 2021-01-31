@@ -9,21 +9,33 @@
 
 struct student;
 
+typedef struct student* p_student;
+
 typedef struct student {
-    char*
+    char name[100];
+    char surname[100];
+    int id;
+    p_student next;
 }_student;
 
-
 int hashKeyGen(char*);   //(name, hash table);
-int store(char*, char**);
-int find(char*, char**);
+int store(char*, char*, int, p_student);
+int findId(char*, char*, p_student);
 int stringCompare(char*, char*);
+p_student createStruct(char*, char*, int);
 
 int main()
 {
-    char** hash_table = (char**)malloc(sizeof(char*) * TABLE_SIZE); //array of pointers to string
+    p_student hash_table = (p_student)malloc(sizeof(_student) * TABLE_SIZE);
     char action[3];
-    char temp[MAX_STR_SIZE];
+    char name[MAX_STR_SIZE];
+    char surname[MAX_STR_SIZE];
+    int id = 0;
+    int i = 0;
+
+    for (i = 0; i < TABLE_SIZE; i++) {
+        (hash_table + i)->id = NULL;
+    }
 
     puts("PRESS KEY FOR ACTION: 'a' add new student, 'q'- exit program");
 
@@ -32,15 +44,15 @@ int main()
         scanf("%s", action);
 
         if( strcmp(action, "a") == 0 && strlen(action) < 2){
-            printf("Enter student name: ");
-            scanf("%s", temp);
+            printf("Enter student name, surname, id: ");
+            scanf("%s %s %d", name, surname, &id);
             
-            store(temp, hash_table);
+            store(name, surname, id, hash_table);
         }
         else if( strcmp(action, "f") == 0 && strlen(action) < 2){
             printf("(FIND)Enter student name: ");
-            scanf("%s", temp);
-            find(temp, hash_table);
+            scanf("%s %s", name, surname);
+            findId(name, surname, hash_table);
         }
         
         else
@@ -52,7 +64,6 @@ int main()
 
 int stringCompare(char* str1, char* str2)   //(1 == true, 0 == false)
 {
-    printf("%s and %s\n", str1, str2);
     int i = 0;
     if( strlen(str1) != strlen(str2) ){ //compare size
         return FALSE;
@@ -65,35 +76,64 @@ int stringCompare(char* str1, char* str2)   //(1 == true, 0 == false)
     return TRUE;
 }
 
-int find(char* str, char** table)
+int findId(char* name, char* surname, p_student table)
 {
-    int key = hashKeyGen(str);
+    int key = hashKeyGen(surname);
+    p_student p = (table + key);
     
-    if(table[key] == NULL){
+    if( (table + key)->id == NULL){
         puts("Key place is empty!");
         return 0;
     }
     
-    else if( stringCompare(str, table[key]) )
-        printf("Found item!\n");
+    while (p != NULL)
+    {
+        if (stringCompare(name, p->name) && stringCompare(surname, p->surname))
+        {
+            printf("Student ID is %d\n", p->id);
+            return p->id;
+        }
+        printf("Nije pronaden iden dalje!\n");
+        p = p->next;
+    }
 
-    else
-        puts("Item does not exist!");
+    printf("nema ga!\n");
 
-        
+    return 1;
+}
+
+int store(char* name, char* surname, int id, p_student table)
+{
+    int hash_key = hashKeyGen(surname);
+    p_student new_student = table + hash_key;
+
+    if ((table + hash_key)->id == NULL) {
+        strcpy((table + hash_key)->name, name);
+        strcpy((table + hash_key)->surname, surname);
+        (table + hash_key)->id = id;
+        (table + hash_key)->next = NULL;
+        printf("Stored value %s %s %d to the hash table with key %d\n", (table + hash_key)->name, (table + hash_key)->surname, (table + hash_key)->id, hash_key);
+    }
+    else {
+        while (new_student->next != NULL)
+            new_student = new_student->next;
+
+            new_student->next = createStruct(name, surname, id);
+            printf("Stored value %s %s %d to the hash table with key %d\n", (table + hash_key)->next->name, (table + hash_key)->next->surname, (table + hash_key)->next->id, hash_key);       
+    }
+
     return 0;
 }
 
-int store(char* str, char** table)
-{
-    int str_size = strlen(str) + 1;
-    int hash_key = hashKeyGen(str);
-    table[hash_key] = (char*)malloc(sizeof(char) * str_size);
-    strcpy(table[hash_key], str);
+p_student createStruct(char* name, char* surname, int id){
+    p_student new_student = (p_student)malloc(sizeof(struct student));
 
-    printf("Stored value %s to the hash table with key %d\n", table[hash_key], hash_key);
+    strcpy( new_student->name, name);
+    strcpy(new_student->surname, surname);
+    new_student->id = id;
+    new_student->next = NULL;
 
-    return 0;
+    return new_student;
 }
 
 int hashKeyGen(char* str)
@@ -111,7 +151,7 @@ int hashKeyGen(char* str)
 
     key %= TABLE_SIZE;
 
-    printf("Hash key for value %s is %d\n", str, key);
+   // printf("Hash key for value %s is %d\n", str, key);
     
     return key;
 }

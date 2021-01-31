@@ -23,6 +23,7 @@ int store(char*, char*, int, p_student);
 int findId(char*, char*, p_student);
 int stringCompare(char*, char*);
 p_student createStruct(char*, char*, int);
+int printTable(p_student);
 
 int main()
 {
@@ -54,6 +55,9 @@ int main()
             scanf("%s %s", name, surname);
             findId(name, surname, hash_table);
         }
+        else if (strcmp(action, "p") == 0 && strlen(action) < 2) {
+            printTable(hash_table);
+        }
         
         else
             puts("WRONG INPUT!");
@@ -74,6 +78,20 @@ int stringCompare(char* str1, char* str2)   //(1 == true, 0 == false)
             if(str1[i] != str2[i])
                 return FALSE;
     return TRUE;
+}
+
+int printTable(p_student table)
+{
+    p_student p = table;
+    int i = 0;
+
+    for (i = 0; i < TABLE_SIZE; i++)
+    {
+        if ((p + i)->id != NULL)
+            printf("KEY: %d %s %s %d\n", i, (p+i)->name, (p+i)->surname, (p+i)->id);
+    }
+    return 0;
+
 }
 
 int findId(char* name, char* surname, p_student table)

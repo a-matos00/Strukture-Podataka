@@ -38,7 +38,7 @@ int main()
         (hash_table + i)->id = NULL;
     }
 
-    puts("PRESS KEY FOR ACTION: 'a' add new student, 'q'- exit program");
+    puts("PRESS KEY FOR ACTION: 'a' add new student, 'p' print list, 'q'- exit program");
 
     while(strcmp(action, "q") != 0){
         puts("PRESS KEY FOR ACTION:");

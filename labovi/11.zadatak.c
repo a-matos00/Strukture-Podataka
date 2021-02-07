@@ -158,18 +158,27 @@ int hashKeyGen(char* str)
 {
     int key = 0;
     int i;
-    
+
     if( strlen(str) == 0 ){
         puts("ERROR! (Empty string, cannot generate hash key)");
         return -1;
     }
-    
-    for( i = 0; i < strlen(str); i++)   //sum of ascii codes of each character of string
-        key += *(str + i);
+
+    if( strlen(str) < 5 )
+    {
+        for( i = 0; i < strlen(str); i++){  //sum of ascii codes of each character of string
+            key += *(str + i);  
+        }
+    }
+
+    else{
+        for( i = 0; i < 5; i++){
+            key += *(str + i); 
+        }
+    }
 
     key %= TABLE_SIZE;
-
-   // printf("Hash key for value %s is %d\n", str, key);
+   //printf("Hash key for value %s is %d\n", str, key);
     
     return key;
 }

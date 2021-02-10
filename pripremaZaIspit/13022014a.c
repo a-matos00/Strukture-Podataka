@@ -29,7 +29,9 @@ p_cvor readWords(char*, p_cvor);
 p_cvor addNode(p_cvor, p_cvor);
 int countChar(p_cvor);
 int countWords(p_cvor);
-p_el createAverageList(p_cvor, p_el);
+p_el createAverageList(p_cvor, p_el, int);
+void addElement(p_el, char*);
+void ispisListe(p_el);
 
 int main()
 {
@@ -67,14 +69,45 @@ int main()
     average = (float)total_char / total_words;
     printf("Prosjecna duljina je %f\n", average);
 
-    Head = createAverageList(root, Head);
+    Head = createAverageList(root, Head, average);
+
+    ispisListe(Head);
     
     return 0;
 }
 
-p_el createAverageList(p_cvor current, p_el list)
+void ispisListe(p_el p)
 {
+    p = p->next;
+
+    while(p != NULL)
+    {
+        printf("%s ", p->rijec);
+        p = p->next;
+    }
+}
+p_el createAverageList(p_cvor current, p_el list, int average)
+{
+    if(current == NULL)
+        return list;
+     
+    createAverageList(current->L, list,average);  
+    
+    if( current->length > average)
+        addElement(list, current->rijec);
+    
+    createAverageList(current->R, list,average);
+    
     return list;
+}
+
+void addElement(p_el list, char* str)
+{
+    p_el new_el = (p_el)malloc(sizeof(_el));
+    new_el->rijec = str;
+    printf("Dodan u vezanu listu: %s\n", new_el->rijec);
+    new_el->next = list->next;
+    list->next = new_el;
 }
 
 

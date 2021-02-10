@@ -1,3 +1,14 @@
+/*
+Strukture podataka – 1 ispitni rok
+13.2.2014.
+Napisati program koji čita iz datoteke dio teksta, te kreira binarno stablo pretraživanja. Binarno stablo se
+kreira na način da se u njega upisuju sve različite riječi iz teksta koji je zapisan u datoteci s pripadajućim
+duljinama unesene riječi.
+struct _Cvor{char *rijec; int length; struct _Cvor *Left; struct _Cvor *Right;};
+Potrebno je izračunati prosječnu duljinu svake riječi zapisane u binarnom stablu.
+Napisati program koji iz tako kreiranog binarnog stabla u ve
+
+*/
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
@@ -35,15 +46,15 @@ void ispisListe(p_el);
 
 int main()
 {
-    p_cvor root = NULL;
-    p_el Head = (p_el)malloc(sizeof(_el));
+    p_cvor root = NULL; //root cvor stabla
+    p_el Head = (p_el)malloc(sizeof(_el));  //head element liste
     Head->next = NULL;
 
-    int total_char;
-    int total_words;
-    float average;
+    int total_char; //ukupni broj slova u binarnom stablu
+    int total_words;    //ukupni broj cvorova u stablu
+    float average;  //prosjek rijeci
 
-    char* buffer;
+    char* buffer;   //buffer za sadrzaj datoteke
     int buffer_size = 0;
     FILE* fp = NULL;
 
@@ -55,12 +66,12 @@ int main()
     else
         puts("Datoteka otvorena!");
  
-    buffer_size = bufferSize(fp);
-    buffer = createBuffer(fp, buffer_size);
+    buffer_size = bufferSize(fp);   //racuna se duljina teksta u datoteteci
+    buffer = createBuffer(fp, buffer_size); //stvara se buffer
 
-    root = readWords(buffer, root);
+    root = readWords(buffer, root); //stvaranje binarnog stabla
     
-    total_char = countChar(root);
+    total_char = countChar(root);  
     printf("\nUkupan broj znakova je %d\n", total_char);
 
     total_words = countWords(root);
@@ -69,7 +80,7 @@ int main()
     average = (float)total_char / total_words;
     printf("Prosjecna duljina je %f\n", average);
 
-    Head = createAverageList(root, Head, average);
+    Head = createAverageList(root, Head, average);  //stvara se lista u koju idu rijeci dulje od prosjeka
 
     ispisListe(Head);
     
@@ -86,6 +97,7 @@ void ispisListe(p_el p)
         p = p->next;
     }
 }
+
 p_el createAverageList(p_cvor current, p_el list, int average)
 {
     if(current == NULL)
@@ -120,7 +132,7 @@ p_cvor readWords(char* buffer, p_cvor root)
     p_cvor new_node;
 
     while( r != -1){
-        r = sscanf(buffer,"%s%n", word, &n);
+        r = sscanf(buffer,"%s%n", word, &n);    //vraca 1 ako je ucitana rijec
     
         if( r == -1){
             puts("Greska/kraj datoteke!");
@@ -182,6 +194,7 @@ p_cvor addNode(p_cvor current, p_cvor new_node)
         puts("Idem lijevo");
         current->L = addNode(current->L, new_node);
     }
+
     return current;
 }
 

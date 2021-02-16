@@ -1,7 +1,0 @@
-Split 112
-London 142
-Zadar 112
-Sarajevo 391
-Solin 112
-Melbourne 891
-

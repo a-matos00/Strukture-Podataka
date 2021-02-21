@@ -22,6 +22,7 @@ void removeNumbers(p_node, char*);
 p_node delete(p_node, int);
 p_node findMin(p_node);
 p_node findMax(p_node);
+void deleteTree(p_node);
 
 int main()
 {
@@ -49,8 +50,20 @@ int main()
     removeNumbers(root, buffer);
     //printInOrder(root);
     fclose(fp);
+
+    deleteTree(root);
     
     return 0;
+}
+
+void deleteTree(p_node current)
+{
+    if(current == NULL)return;
+
+    deleteTree(current->L);
+    deleteTree(current->R);
+    printf("Brisem %d\n", current->num);
+    free(current);
 }
 
 p_node delete(p_node root, int num)
